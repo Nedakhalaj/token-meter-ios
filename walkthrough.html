@@ -1,0 +1,902 @@
+<title>Token Meter — Visual Walkthrough</title>
+
+<style>
+:root {
+  /* Ground + ink — taken from the app's own BrandLightColors */
+  --bg:        #FBF8FF;
+  --surface:   #FFFFFF;
+  --surface-2: #EFEDF7;
+  --ink:       #1B1B21;
+  --ink-2:     #46464F;
+  --ink-3:     #777680;
+  --line:      #C7C5D0;
+  --line-soft: #E3E1EC;
+
+  /* Brand — Indigo, the app's primary */
+  --accent:      #4F5AE0;
+  --accent-soft: #E1E0FF;
+  --on-accent:   #FFFFFF;
+
+  /* Semantic quota states — the app's UsageColors */
+  --ok:    #166B3A;
+  --warn:  #8F6400;
+  --crit:  #D32F3F;
+  --track: #E3E2EC;
+
+  /* Provider accents — straight from ProviderBranding.kt */
+  --claude: #D97757;
+  --codex:  #3941FF;
+  --router: #4C7EFF;
+  --drive:  #1FA463;
+
+  --phone-bg:   #FBF8FF;
+  --phone-card: #FFFFFF;
+
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+
+  --r: 18px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:        #121319;
+    --surface:   #1E1F25;
+    --surface-2: #292930;
+    --ink:       #E4E1E9;
+    --ink-2:     #C7C5D0;
+    --ink-3:     #918F9A;
+    --line:      #46464F;
+    --line-soft: #33343D;
+    --accent:      #BEC2FF;
+    --accent-soft: #353CA8;
+    --on-accent:   #1A1F8C;
+    --ok:    #4ADE80;
+    --warn:  #FBBF24;
+    --crit:  #F87171;
+    --track: #33343D;
+    --phone-bg:   #121319;
+    --phone-card: #1E1F25;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:        #121319;
+  --surface:   #1E1F25;
+  --surface-2: #292930;
+  --ink:       #E4E1E9;
+  --ink-2:     #C7C5D0;
+  --ink-3:     #918F9A;
+  --line:      #46464F;
+  --line-soft: #33343D;
+  --accent:      #BEC2FF;
+  --accent-soft: #353CA8;
+  --on-accent:   #1A1F8C;
+  --ok:    #4ADE80;
+  --warn:  #FBBF24;
+  --crit:  #F87171;
+  --track: #33343D;
+  --phone-bg:   #121319;
+  --phone-card: #1E1F25;
+}
+:root[data-theme="light"] {
+  --bg:        #FBF8FF;
+  --surface:   #FFFFFF;
+  --surface-2: #EFEDF7;
+  --ink:       #1B1B21;
+  --ink-2:     #46464F;
+  --ink-3:     #777680;
+  --line:      #C7C5D0;
+  --line-soft: #E3E1EC;
+  --accent:      #4F5AE0;
+  --accent-soft: #E1E0FF;
+  --on-accent:   #FFFFFF;
+  --ok:    #166B3A;
+  --warn:  #8F6400;
+  --crit:  #D32F3F;
+  --track: #E3E2EC;
+  --phone-bg:   #FBF8FF;
+  --phone-card: #FFFFFF;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 16.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px 120px;
+}
+
+/* ---------- Masthead ---------- */
+.masthead {
+  padding: 72px 0 40px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 56px;
+}
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 18px;
+}
+h1 {
+  font-size: clamp(2.4rem, 6vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  font-weight: 680;
+  margin: 0 0 20px;
+  text-wrap: balance;
+}
+.standfirst {
+  font-size: 1.15rem;
+  color: var(--ink-2);
+  max-width: 60ch;
+  margin: 0;
+}
+
+/* ---------- Sections ---------- */
+section { margin-bottom: 76px; }
+
+h2 {
+  font-size: 1.6rem;
+  letter-spacing: -0.022em;
+  font-weight: 660;
+  margin: 0 0 8px;
+  text-wrap: balance;
+}
+h3 {
+  font-size: 1.08rem;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+  margin: 36px 0 10px;
+}
+.sec-note {
+  color: var(--ink-3);
+  font-size: 0.95rem;
+  margin: 0 0 28px;
+  max-width: 62ch;
+}
+p { max-width: 65ch; }
+strong { font-weight: 640; }
+
+.kicker {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+/* ---------- Thesis card ---------- */
+.thesis {
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+  padding: 32px 34px;
+  font-size: 1.16rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.thesis .lead {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* ---------- Phone mockups ---------- */
+.rail {
+  display: flex;
+  gap: 28px;
+  overflow-x: auto;
+  padding: 8px 4px 28px;
+  scroll-snap-type: x mandatory;
+}
+.rail figure { scroll-snap-align: start; margin: 0; flex: 0 0 auto; }
+figcaption {
+  margin-top: 14px;
+  max-width: 258px;
+}
+figcaption b {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 640;
+  margin-bottom: 3px;
+}
+figcaption span {
+  font-size: 0.87rem;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+
+.phone {
+  width: 258px;
+  height: 520px;
+  border-radius: 34px;
+  border: 1px solid var(--line);
+  background: var(--phone-bg);
+  padding: 10px 9px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+.notch {
+  width: 62px; height: 5px;
+  background: var(--line);
+  border-radius: 3px;
+  margin: 2px auto 10px;
+  flex: none;
+}
+.screen {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 8px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: none;
+  padding-bottom: 2px;
+}
+.topbar .title { font-size: 15px; font-weight: 650; letter-spacing: -0.015em; }
+.topbar .gear {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid var(--ink-3);
+  position: relative;
+}
+.topbar .gear::after {
+  content:""; position:absolute; inset: 6px;
+  border-radius: 50%; border: 1.5px solid var(--ink-3);
+}
+.back {
+  font-size: 18px; color: var(--ink-2); line-height: 1;
+}
+
+/* account card inside phone */
+.acct {
+  background: var(--phone-card);
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  padding: 13px 13px 14px;
+  flex: none;
+}
+.acct-head {
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: 11px;
+}
+.mark {
+  width: 27px; height: 27px;
+  border-radius: 9px;
+  display: grid; place-items: center;
+  font-family: var(--mono);
+  font-size: 12px; font-weight: 700;
+  flex: none;
+}
+.mark.claude { background: color-mix(in srgb, var(--claude) 16%, transparent); color: var(--claude); }
+.mark.codex  { background: color-mix(in srgb, var(--codex) 16%, transparent);  color: var(--codex);  }
+.mark.router { background: color-mix(in srgb, var(--router) 16%, transparent); color: var(--router); }
+.mark.drive  { background: color-mix(in srgb, var(--drive) 16%, transparent);  color: var(--drive);  }
+.acct-name { font-size: 13.5px; font-weight: 620; letter-spacing: -0.01em; }
+.acct-sub { font-size: 10.5px; color: var(--ink-3); }
+.dots { margin-left: auto; color: var(--ink-3); font-size: 15px; letter-spacing: 1px; }
+
+.win { margin-bottom: 10px; }
+.win:last-of-type { margin-bottom: 0; }
+.win-top {
+  display: flex; justify-content: space-between; align-items: baseline;
+  font-size: 11px; margin-bottom: 5px;
+}
+.win-label { color: var(--ink-2); }
+.win-pct {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+.bar {
+  height: 7px; border-radius: 4px;
+  background: var(--track);
+  overflow: hidden;
+}
+.bar i { display: block; height: 100%; border-radius: 4px; }
+.f-ok   { background: var(--ok); }
+.f-warn { background: var(--warn); }
+.f-crit { background: var(--crit); }
+.t-ok   { color: var(--ok); }
+.t-warn { color: var(--warn); }
+.t-crit { color: var(--crit); }
+.reset {
+  font-size: 10px; color: var(--ink-3);
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.facts {
+  display: flex; justify-content: space-between;
+  border-top: 1px solid var(--line-soft);
+  margin-top: 12px; padding-top: 9px;
+  font-size: 10.5px; color: var(--ink-3);
+}
+.facts b { color: var(--ink-2); font-weight: 600; }
+
+.fab {
+  position: absolute;
+  right: 20px; bottom: 20px;
+  width: 44px; height: 44px;
+  border-radius: 15px;
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid; place-items: center;
+  font-size: 24px; font-weight: 400;
+  line-height: 1;
+}
+
+/* provider picker rows */
+.pick {
+  background: var(--phone-card);
+  border: 1px solid var(--line-soft);
+  border-radius: 13px;
+  padding: 12px 13px;
+  display: flex; align-items: center; gap: 11px;
+  flex: none;
+}
+.pick .nm { font-size: 13px; font-weight: 600; }
+.pick .ds { font-size: 10.5px; color: var(--ink-3); }
+.pick .chev { margin-left: auto; color: var(--ink-3); font-size: 15px; }
+
+/* device code */
+.codebox {
+  background: var(--phone-card);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  padding: 22px 14px;
+  text-align: center;
+  flex: none;
+}
+.codebox .digits {
+  font-family: var(--mono);
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.codebox .url {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent);
+  word-break: break-all;
+}
+.hint { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; flex: none; }
+.hint.center { text-align: center; }
+
+/* webview fake */
+.web {
+  background: var(--phone-card);
+  border: 1px solid var(--line-soft);
+  border-radius: 13px;
+  flex: 1;
+  padding: 18px 15px;
+  display: flex; flex-direction: column; gap: 11px;
+}
+.urlbar {
+  background: var(--surface-2);
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-family: var(--mono);
+  font-size: 9.5px;
+  color: var(--ink-3);
+  flex: none;
+}
+.field {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 11px;
+  color: var(--ink-3);
+  flex: none;
+}
+.btn-full {
+  background: var(--claude);
+  color: #fff;
+  border-radius: 9px;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 620;
+  flex: none;
+}
+.btn-full.indigo { background: var(--accent); color: var(--on-accent); }
+
+/* settings rows */
+.srow {
+  background: var(--phone-card);
+  border: 1px solid var(--line-soft);
+  border-radius: 12px;
+  padding: 11px 12px;
+  display: flex; align-items: center;
+  font-size: 12px;
+  flex: none;
+}
+.srow .val { margin-left: auto; color: var(--ink-3); font-family: var(--mono); font-size: 11px; }
+.toggle {
+  margin-left: auto;
+  width: 34px; height: 20px; border-radius: 10px;
+  background: var(--accent);
+  position: relative;
+}
+.toggle::after {
+  content:""; position:absolute; top: 2px; right: 2px;
+  width: 16px; height: 16px; border-radius: 50%; background: #fff;
+}
+.toggle.off { background: var(--track); }
+.toggle.off::after { right: auto; left: 2px; }
+
+/* empty state */
+.empty {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 0 14px;
+}
+.empty .ring {
+  width: 66px; height: 66px; border-radius: 50%;
+  border: 3px solid var(--track);
+  border-top-color: var(--accent);
+  border-right-color: var(--accent);
+}
+.empty h4 { font-size: 14px; font-weight: 640; margin: 0; }
+.empty p { font-size: 11px; color: var(--ink-3); margin: 0; max-width: 30ch; }
+
+/* ---------- Annotation ---------- */
+.anno {
+  display: grid;
+  grid-template-columns: 258px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 720px) { .anno { grid-template-columns: 1fr; } }
+
+.notes { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 20px; }
+.notes li { display: grid; grid-template-columns: 26px 1fr; gap: 14px; }
+.pin {
+  width: 24px; height: 24px; border-radius: 7px;
+  background: var(--accent-soft); color: var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+}
+.notes b { display: block; font-size: 0.97rem; font-weight: 640; margin-bottom: 2px; }
+.notes span { font-size: 0.92rem; color: var(--ink-2); line-height: 1.55; }
+.notes code {
+  font-family: var(--mono); font-size: 0.83em;
+  background: var(--surface-2); padding: 1px 5px; border-radius: 4px;
+}
+
+/* ---------- Flow ---------- */
+.flow {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: 10px;
+  padding: 26px;
+  background: var(--surface);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r);
+}
+.node {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background: var(--bg);
+}
+.node.home { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+.arrow { color: var(--ink-3); font-size: 1rem; }
+
+/* ---------- Widget demo ---------- */
+.widget-demo {
+  display: flex; gap: 24px; flex-wrap: wrap; align-items: flex-start;
+}
+.homescreen {
+  width: 240px;
+  border-radius: 22px;
+  padding: 16px;
+  background: linear-gradient(160deg, #3a3560, #5b4a7a 60%, #8a6f7d);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 13px;
+  flex: none;
+}
+.appicon { aspect-ratio: 1; border-radius: 12px; background: rgba(255,255,255,0.17); }
+.wdg {
+  grid-column: span 4;
+  background: rgba(18,19,25,0.82);
+  border-radius: 15px;
+  padding: 12px 13px;
+  color: #E4E1E9;
+}
+.wdg-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+.wdg-row:last-child { margin-bottom: 0; }
+.wdg .mk {
+  width: 18px; height: 18px; border-radius: 6px; flex: none;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+}
+.wdg .nm { font-size: 10.5px; flex: none; width: 42px; }
+.wdg .bar { flex: 1; height: 5px; background: rgba(255,255,255,0.16); }
+.wdg .pc {
+  font-family: var(--mono); font-size: 10px; font-variant-numeric: tabular-nums;
+  width: 30px; text-align: right; flex: none;
+}
+
+/* ---------- Table ---------- */
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line-soft); border-radius: var(--r); }
+table { border-collapse: collapse; width: 100%; font-size: 0.93rem; min-width: 560px; }
+th {
+  text-align: left;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  font-weight: 600;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line-soft);
+  background: var(--surface);
+}
+td { padding: 13px 18px; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+tr:last-child td { border-bottom: none; }
+td code { font-family: var(--mono); font-size: 0.86em; }
+.diff { font-family: var(--mono); font-size: 11px; white-space: nowrap; font-weight: 600; }
+.d-easy { color: var(--ok); }
+.d-mid  { color: var(--warn); }
+.d-hard { color: var(--crit); }
+
+/* ---------- Callout ---------- */
+.callout {
+  border-left: 3px solid var(--crit);
+  background: color-mix(in srgb, var(--crit) 7%, transparent);
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+}
+.callout h3 { margin: 0 0 8px; color: var(--crit); font-size: 1rem; }
+.callout p { margin: 0 0 10px; font-size: 0.95rem; }
+.callout p:last-child { margin-bottom: 0; }
+
+/* ---------- Steps ---------- */
+.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+.steps li {
+  counter-increment: s;
+  display: grid; grid-template-columns: 30px 1fr; gap: 16px;
+  align-items: start;
+}
+.steps li::before {
+  content: counter(s);
+  width: 28px; height: 28px; border-radius: 9px;
+  background: var(--accent); color: var(--on-accent);
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 12px; font-weight: 700;
+}
+.steps b { display: block; font-weight: 640; margin-bottom: 2px; }
+.steps span { color: var(--ink-2); font-size: 0.94rem; }
+
+hr.rule { border: none; border-top: 1px solid var(--line-soft); margin: 0 0 56px; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Android → iOS · Orientation</p>
+  <h1>Token Meter, taken apart</h1>
+  <p class="standfirst">Every screen in the Android app, drawn at size, labelled, and mapped to what you'd build in SwiftUI. Colors below are the app's real ones, pulled from its theme files.</p>
+</header>
+
+<section>
+  <div class="thesis">
+    <span class="lead">The whole app in one sentence</span>
+    Token Meter asks four companies' servers <em>"how much has this user used?"</em>, saves the answers on the phone, and draws them as colored bars — on a dashboard, a home screen widget, and a notification.
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <span class="kicker">Part one</span>
+  <h2>The five screens</h2>
+  <p class="sec-note">Not one screen — five. Scroll sideways. The Dashboard is where you'll spend 95% of your time, so it's first.</p>
+
+  <div class="rail">
+
+    <!-- 1 · Dashboard -->
+    <figure>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="topbar"><span class="title">Token Meter</span><span class="gear"></span></div>
+
+          <div class="acct">
+            <div class="acct-head">
+              <span class="mark claude">C</span>
+              <span><span class="acct-name">Claude · personal</span><br><span class="acct-sub">Max 20×</span></span>
+              <span class="dots">···</span>
+            </div>
+            <div class="win">
+              <div class="win-top"><span class="win-label">5-hour</span><span class="win-pct t-ok">42%</span></div>
+              <div class="bar"><i class="f-ok" style="width:42%"></i></div>
+              <div class="reset">resets in 2h 14m</div>
+            </div>
+            <div class="win">
+              <div class="win-top"><span class="win-label">7-day</span><span class="win-pct t-warn">67%</span></div>
+              <div class="bar"><i class="f-warn" style="width:67%"></i></div>
+              <div class="reset">resets Tue 09:00</div>
+            </div>
+            <div class="facts"><span>Plan <b>Max 20×</b></span><span>Renews <b>3 Aug</b></span></div>
+          </div>
+
+          <div class="acct">
+            <div class="acct-head">
+              <span class="mark codex">O</span>
+              <span><span class="acct-name">Codex · work</span><br><span class="acct-sub">ChatGPT Pro</span></span>
+              <span class="dots">···</span>
+            </div>
+            <div class="win">
+              <div class="win-top"><span class="win-label">5-hour</span><span class="win-pct t-crit">88%</span></div>
+              <div class="bar"><i class="f-crit" style="width:88%"></i></div>
+              <div class="reset">resets in 41m</div>
+            </div>
+          </div>
+        </div>
+        <div class="fab">+</div>
+      </div>
+      <figcaption><b>1 · Dashboard</b><span>Home. One card per connected account. This is the app.</span></figcaption>
+    </figure>
+
+    <!-- 2 · Empty -->
+    <figure>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="topbar"><span class="title">Token Meter</span><span class="gear"></span></div>
+          <div class="empty">
+            <div class="ring"></div>
+            <h4>No accounts yet</h4>
+            <p>Connect a provider to start watching your quota.</p>
+            <div class="btn-full indigo" style="width:100%">Add your first account</div>
+          </div>
+        </div>
+      </div>
+      <figcaption><b>1b · Dashboard, empty</b><span>The very first launch. Same screen, different state — you'll build this too.</span></figcaption>
+    </figure>
+
+    <!-- 3 · Add account -->
+    <figure>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="topbar"><span class="back">←</span><span class="title" style="margin-right:auto;margin-left:10px">Add account</span></div>
+          <div class="pick"><span class="mark claude">C</span><span><span class="nm">Claude</span><br><span class="ds">Sign in on this phone</span></span><span class="chev">›</span></div>
+          <div class="pick"><span class="mark codex">O</span><span><span class="nm">Codex</span><br><span class="ds">Code on another device</span></span><span class="chev">›</span></div>
+          <div class="pick"><span class="mark router">R</span><span><span class="nm">OpenRouter</span><br><span class="ds">Paste an API key</span></span><span class="chev">›</span></div>
+          <div class="pick"><span class="mark drive">D</span><span><span class="nm">Google Drive</span><br><span class="ds">Code on another device</span></span><span class="chev">›</span></div>
+        </div>
+      </div>
+      <figcaption><b>2 · Add account</b><span>A picker. Each row leads to a different kind of sign-in.</span></figcaption>
+    </figure>
+
+    <!-- 4 · Claude login -->
+    <figure>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="topbar"><span class="back">✕</span><span class="title" style="margin-right:auto;margin-left:10px">Sign in to Claude</span></div>
+          <div class="web">
+            <div class="urlbar">🔒 claude.ai/login</div>
+            <div style="text-align:center;font-size:13px;font-weight:640;margin:6px 0">Welcome back</div>
+            <div class="field">you@email.com</div>
+            <div class="field">••••••••••</div>
+            <div class="btn-full">Continue</div>
+            <div style="text-align:center;font-size:9.5px;color:var(--ink-3);margin-top:2px">or continue with Google</div>
+          </div>
+          <div class="hint center">A real web page, inside the app.</div>
+        </div>
+      </div>
+      <figcaption><b>3 · Claude login</b><span>A mini browser showing the real claude.ai. The app grabs the session cookie afterwards.</span></figcaption>
+    </figure>
+
+    <!-- 5 · Device code -->
+    <figure>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="topbar"><span class="back">✕</span><span class="title" style="margin-right:auto;margin-left:10px">Sign in to Codex</span></div>
+          <div class="hint">Open the link below on any device you're already signed in to ChatGPT on, then enter this code.</div>
+          <div class="codebox">
+            <div class="digits">WDJB-MJHT</div>
+            <div class="url">auth.openai.com/codex/device</div>
+          </div>
+          <div class="hint center" style="color:var(--ink-3)">Waiting for approval…</div>
+          <div class="srow" style="justify-content:center;color:var(--accent)">Copy code</div>
+        </div>
+      </div>
+      <figcaption><b>4 · Device code</b><span>The Netflix-on-a-TV trick. Used for Codex and Google Drive.</span></figcaption>
+    </figure>
+
+    <!-- 6 · Settings -->
+    <figure>
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen">
+          <div class="topbar"><span class="back">←</span><span class="title" style="margin-right:auto;margin-left:10px">Settings</span></div>
+          <div class="srow">Monitoring<span class="toggle"></span></div>
+          <div class="srow">Check every<span class="val">15 min</span></div>
+          <div class="srow">Notification<span class="toggle"></span></div>
+          <div class="srow">Home widget<span class="toggle"></span></div>
+          <div class="srow">Match wallpaper<span class="toggle off"></span></div>
+          <div class="srow">Theme<span class="val">System</span></div>
+          <div class="srow">About<span class="val">v1.0</span></div>
+        </div>
+      </div>
+      <figcaption><b>5 · Settings</b><span>Toggles and a refresh interval. The simplest screen to build.</span></figcaption>
+    </figure>
+
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <span class="kicker">Part two</span>
+  <h2>Anatomy of one account card</h2>
+  <p class="sec-note">This little card is the heart of the app. Understand it and you understand the data model.</p>
+
+  <div class="anno">
+    <div class="acct" style="border-radius:14px">
+      <div class="acct-head">
+        <span class="mark claude">C</span>
+        <span><span class="acct-name">Claude · personal</span><br><span class="acct-sub">Max 20×</span></span>
+        <span class="dots">···</span>
+      </div>
+      <div class="win">
+        <div class="win-top"><span class="win-label">5-hour</span><span class="win-pct t-ok">42%</span></div>
+        <div class="bar"><i class="f-ok" style="width:42%"></i></div>
+        <div class="reset">resets in 2h 14m</div>
+      </div>
+      <div class="win">
+        <div class="win-top"><span class="win-label">7-day</span><span class="win-pct t-warn">67%</span></div>
+        <div class="bar"><i class="f-warn" style="width:67%"></i></div>
+        <div class="reset">resets Tue 09:00</div>
+      </div>
+      <div class="facts"><span>Plan <b>Max 20×</b></span><span>Renews <b>3 Aug</b></span></div>
+    </div>
+
+    <ul class="notes">
+      <li><span class="pin">A</span><span><b>Brand mark + label</b>Each provider has its own icon and accent color. "personal" is a name <em>you</em> typed — you can add two Claude accounts and tell them apart.</span></li>
+      <li><span class="pin">B</span><span><b>The ··· menu</b>Refresh, Rename, Remove. Remove asks first, then wipes the saved password, the cached numbers, everything.</span></li>
+      <li><span class="pin">C</span><span><b>A usage window</b>The core idea. Claude limits you two ways at once: a rolling 5-hour budget and a weekly one. Each gets its own bar. In code this is one <code>UsageWindow</code>: a label, a number from 0 to 1, and a reset time.</span></li>
+      <li><span class="pin">D</span><span><b>The color rule</b>Under 50% green, 50–80% amber, over 80% red. Same three colors on the dashboard, the widget, and the notification — defined once, in one file.</span></li>
+      <li><span class="pin">E</span><span><b>Reset countdown</b>Recomputed live from a timestamp the server sent. Not stored as text.</span></li>
+      <li><span class="pin">F</span><span><b>Facts row</b>Anything that isn't a percentage — plan name, renewal date, dollar balance. Free-form label/value pairs, so each provider can show what suits it.</span></li>
+    </ul>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <span class="kicker">Part three</span>
+  <h2>What a widget is</h2>
+  <p class="sec-note">You already know these. On iPhone, long-press the home screen, tap +, and add the little Weather or Calendar square. That's a widget.</p>
+
+  <div class="widget-demo">
+    <div class="homescreen">
+      <div class="appicon"></div><div class="appicon"></div><div class="appicon"></div><div class="appicon"></div>
+      <div class="wdg">
+        <div class="wdg-row"><span class="mk" style="background:rgba(217,119,87,.22);color:#E89A7E">C</span><span class="nm">Claude</span><span class="bar"><i class="f-ok" style="width:42%"></i></span><span class="pc">42%</span></div>
+        <div class="wdg-row"><span class="mk" style="background:rgba(57,65,255,.28);color:#9AA0FF">O</span><span class="nm">Codex</span><span class="bar"><i class="f-crit" style="width:88%"></i></span><span class="pc">88%</span></div>
+        <div class="wdg-row"><span class="mk" style="background:rgba(31,164,99,.22);color:#5CC98F">D</span><span class="nm">Drive</span><span class="bar"><i class="f-warn" style="width:71%"></i></span><span class="pc">71%</span></div>
+      </div>
+      <div class="appicon"></div><div class="appicon"></div><div class="appicon"></div><div class="appicon"></div>
+    </div>
+
+    <div style="flex:1;min-width:260px">
+      <p style="margin-top:0">Token Meter's widget sits on your home screen and shows the same bars, so you can check your quota <strong>without opening anything</strong>.</p>
+      <p>The important rule: <strong>the widget never talks to the internet itself.</strong> The app fetches the numbers and saves them to the phone. The widget just reads that saved copy and draws it. That keeps the two from fighting over who fetches what.</p>
+      <p style="margin-bottom:0">On iOS you'd build this with <strong>WidgetKit</strong>. It's a genuinely separate skill from normal SwiftUI, with its own restrictions. Leave it until the main app works.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <span class="kicker">Part four</span>
+  <h2>How the screens connect</h2>
+  <p class="sec-note">Everything starts and ends at the Dashboard. There's no tab bar and no deep hierarchy.</p>
+
+  <div class="flow">
+    <span class="node home">Dashboard</span>
+    <span class="arrow">→</span>
+    <span class="node">Add account</span>
+    <span class="arrow">→</span>
+    <span class="node">Sign in</span>
+    <span class="arrow">→</span>
+    <span class="node home">Dashboard</span>
+    <span class="arrow" style="margin-left:14px">·</span>
+    <span class="node home" style="margin-left:14px">Dashboard</span>
+    <span class="arrow">→</span>
+    <span class="node">Settings</span>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <span class="kicker">Part five</span>
+  <h2>Android → iOS, piece by piece</h2>
+  <p class="sec-note">The same job, done by a different tool on each platform. Green means the concepts line up almost exactly.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr><th>What it does</th><th>Android uses</th><th>You'd use</th><th>Effort</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Draws the screens</td><td>Jetpack Compose</td><td><strong>SwiftUI</strong></td><td class="diff d-easy">easy</td></tr>
+        <tr><td>Asks servers for data</td><td>OkHttp</td><td><strong>URLSession</strong></td><td class="diff d-easy">easy</td></tr>
+        <tr><td>Turns the reply into objects</td><td>kotlinx.serialization</td><td><strong>Codable</strong></td><td class="diff d-easy">easy</td></tr>
+        <tr><td>Stores passwords safely</td><td>Android Keystore</td><td><strong>Keychain</strong></td><td class="diff d-easy">easy</td></tr>
+        <tr><td>Stores settings + cached numbers</td><td>DataStore</td><td><strong>UserDefaults</strong> or a JSON file</td><td class="diff d-easy">easy</td></tr>
+        <tr><td>The home screen tile</td><td>Glance</td><td><strong>WidgetKit</strong></td><td class="diff d-mid">medium</td></tr>
+        <tr><td>The in-app login page</td><td>WebView</td><td><strong>WKWebView</strong></td><td class="diff d-mid">medium</td></tr>
+        <tr><td>Checks every 15 min, always</td><td>Foreground service</td><td><strong>no equivalent</strong></td><td class="diff d-hard">blocker</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout" style="margin-top:32px">
+    <h3>The one row that changes your plan</h3>
+    <p>Android lets an app run forever in the background, checking every 15 minutes like clockwork. <strong>iOS does not allow this.</strong> The closest thing, <code>BGAppRefreshTask</code>, runs when iOS decides — maybe 20 minutes, maybe six hours, maybe not until tomorrow.</p>
+    <p>So the iOS version can't be a copy. It fetches when you open the app, and when the widget's timeline refreshes. Sometimes the numbers will be a bit old, and the design has to say so honestly — a small "updated 2h ago" label rather than pretending it's live.</p>
+    <p>That's a <strong>product decision</strong>, and it's yours to make before any code gets written.</p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<section>
+  <span class="kicker">Part six</span>
+  <h2>Where to actually start</h2>
+  <p class="sec-note">In order. Don't skip ahead — each step makes the next one obvious.</p>
+
+  <ol class="steps">
+    <li><b>Build the Dashboard with fake data</b><span>A hard-coded list of two accounts. No internet, no login, no saving. Just SwiftUI drawing the cards you see above. This teaches you the shape of the data.</span></li>
+    <li><b>Add one real provider — OpenRouter</b><span>Not Claude. OpenRouter is the easiest: you paste a key, the app makes one plain request. No web view, no codes, no token refreshing. Get real numbers on screen once.</span></li>
+    <li><b>Save things between launches</b><span>Key in the Keychain, cached numbers on disk. Close the app, reopen it, see your data still there.</span></li>
+    <li><b>Add Settings and the ··· menu</b><span>Rename, remove, refresh, pick an interval. Small screens, quick wins, and now the app feels finished.</span></li>
+    <li><b>Then the hard providers</b><span>Codex's device code, then Claude's web view. Both involve real authentication work. By now you'll have the vocabulary for it.</span></li>
+    <li><b>Then the widget</b><span>Last. It reads what's already on disk, so it only makes sense once there's something there to read.</span></li>
+  </ol>
+</section>
+
+</div>
