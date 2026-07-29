@@ -1,0 +1,45 @@
+//
+//  AccountRepository.swift
+//  TokenMeter
+//
+//  Created by neda khalajnejad on 2026-07-23.
+//
+
+import Foundation
+
+@Observable
+@MainActor
+final class AccountStore  {
+    private(set) var accounts: [Account]
+    
+    private let services: [Provider: UsageService]
+    
+    init(accounts: [Account], services: [Provider : UsageService] = [:]) {
+        self.accounts = accounts
+        self.services = services
+    }
+    
+    func remove(_ account : Account) {
+        accounts.removeAll(where: { $0.id == account.id })
+    }
+     
+    func refresh(account: Account) async throws  {
+        guard let service = services[account.provider] else { return }
+        let windows =  try await service.fetchUsage(for: account)
+        guard let i = accounts.firstIndex(where: { $0.id == account.id }) else { return }
+        accounts[i] = account.replacingWindows(with: windows)
+    }
+    
+    func refreshAll() async {
+        await withTaskGroup(of: Void.self) { group in
+            for account in accounts {
+                group.addTask {
+                    try? await self.refresh(account: account)
+                }
+            }
+        }
+    }
+    
+    
+}
+
