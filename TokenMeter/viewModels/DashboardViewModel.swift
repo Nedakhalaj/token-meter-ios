@@ -31,5 +31,10 @@ final class DashboardViewModel {
     func remove(_ account: Account){
         repository.remove(account)
     }
+    
+    func add(provider: Provider){
+        let account = Account(provider: provider,nickname: "new", planName: "-", windows: [])
+        repository.add(account)
+    }
 }
 

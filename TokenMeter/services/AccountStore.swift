@@ -10,6 +10,8 @@ import Foundation
 @Observable
 @MainActor
 final class AccountStore  {
+    
+    //he store owns the accounts data and Data changes happen where the data lives.
     private(set) var accounts: [Account]
     
     private let services: [Provider: UsageService]
@@ -21,6 +23,10 @@ final class AccountStore  {
     
     func remove(_ account : Account) {
         accounts.removeAll(where: { $0.id == account.id })
+    }
+     
+    func add(_ account: Account)  {
+        accounts.append(account)
     }
      
     func refresh(account: Account) async throws  {
