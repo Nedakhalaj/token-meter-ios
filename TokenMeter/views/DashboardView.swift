@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DashboardView: View {
     let viewModel: DashboardViewModel
-    
+    @State private var showingAdd = false
     
     var body:some View {
         NavigationStack{
@@ -36,11 +36,18 @@ struct DashboardView: View {
             .toolbar{
                 ToolbarItem(placement: .primaryAction){
                     Button{
-                        //TODO: add account
+                        showingAdd = true
                     }label: {
                         Image(systemName: "plus")
                     }
+                
                 }
+            }
+        }
+        .sheet(isPresented: $showingAdd) {
+            AddAccountView { provider in
+                viewModel.add(provider: provider)
+                
             }
         }
     }

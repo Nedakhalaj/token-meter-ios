@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Provider: String {
+enum Provider: String, CaseIterable {
     case claude
     case codex
     case openRouter
@@ -59,7 +59,7 @@ extension Account {
     ]
     
      func replacingWindows(with newWindows: [UsageWindow]) -> Account {
-         Account( provider: provider, nickname: nickname, planName: planName, windows: windows)
+         Account( provider: provider, nickname: nickname, planName: planName, windows: newWindows)
     }
     
 }
