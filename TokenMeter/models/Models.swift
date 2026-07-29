@@ -35,19 +35,32 @@ struct UsageWindow:Identifiable {
 }
 
 struct Account: Identifiable {
-    let id = UUID()
+    let id :UUID
     let provider: Provider
     let nickname: String
     let planName: String
     let windows: [UsageWindow]
+    
+    init(id: UUID = UUID(), provider: Provider, nickname: String, planName: String, windows: [UsageWindow]) {
+        self.id = id
+        self.provider = provider
+        self.nickname = nickname
+        self.planName = planName
+        self.windows = windows
+    }
+
 }
 
 extension Account {
     static var sample: [Account] = [
-        Account(provider: .claude, nickname: "personal", planName: "Max 20x", windows: [UsageWindow(label: "5-hour", fraction: 0.42, resetsAt: Date().addingTimeInterval(60 * 60 * 2)),
+        Account( provider: .claude, nickname: "personal", planName: "Max 20x", windows: [UsageWindow(label: "5-hour", fraction: 0.42, resetsAt: Date().addingTimeInterval(60 * 60 * 2)),
                                                                                         UsageWindow(label: "7-day", fraction: 0.67, resetsAt: Date().addingTimeInterval(60 * 60 * 26))                                                                           ]),
-        Account(provider: .codex, nickname: "work", planName: "ChatGPT pro", windows: [UsageWindow(label: "5-hour", fraction: 0.88, resetsAt: Date().addingTimeInterval(60 * 41))])
+        Account( provider: .codex, nickname: "work", planName: "ChatGPT pro", windows: [UsageWindow(label: "5-hour", fraction: 0.88, resetsAt: Date().addingTimeInterval(60 * 41))])
     ]
+    
+     func replacingWindows(with newWindows: [UsageWindow]) -> Account {
+         Account( provider: provider, nickname: nickname, planName: planName, windows: windows)
+    }
     
 }
 

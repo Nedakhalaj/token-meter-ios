@@ -8,24 +8,27 @@
 import SwiftUI
 
 struct DashboardView: View {
-    let store : AccountStore
+    let viewModel: DashboardViewModel
     
     
     var body:some View {
         NavigationStack{
             Group{
-                if store.accounts.isEmpty {
+                if viewModel.accounts.isEmpty {
                     emptyState
                 }else{
                     ScrollView(){
                         LazyVStack(spacing: 16){
-                            ForEach(store.accounts) { account in
+                            ForEach(viewModel.accounts) { account in
                                 AccountCard(account: account){
-                                    store.remove(account)
+                                    viewModel.remove(account)
                                 }
                             }
                         }
                         .padding(16)
+                    }
+                    .refreshable {
+                        await viewModel.refresh()
                     }
                 }
             }
@@ -56,10 +59,10 @@ struct DashboardView: View {
 }
 
 #Preview("With accounts") {
-    DashboardView(store: AccountStore(accounts: Account.sample))
-
+    DashboardView(viewModel: DashboardViewModel(repository: AccountStore(accounts: Account.sample)))
 }
-#Preview("Empty"){
-    DashboardView(store: AccountStore())
+
+#Preview("Empty") {
+    DashboardView(viewModel: DashboardViewModel(repository: AccountStore(accounts: Account.sample)))
 
 }

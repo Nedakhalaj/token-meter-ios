@@ -8,7 +8,8 @@
 import Foundation
 
 protocol UsageService {
-    var provider: Provider{ get }
+    
+    var provider: Provider { get }
     
     func fetchUsage(for account: Account) async throws -> [UsageWindow]
 }
