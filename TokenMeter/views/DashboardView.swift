@@ -45,12 +45,15 @@ struct DashboardView: View {
             }
         }
         .sheet(isPresented: $showingAdd) {
-            AddAccountView { provider in
-                viewModel.add(provider: provider)
-                
-            }
-        }
-    }
+            AddAccountView(
+                onPick: { provider in
+                    viewModel.add(provider: provider)
+                },
+                onConnectOpenRouter: { key in
+                    viewModel.addOpenRouter(apiKey: key)
+                }
+            )
+        }    }
     private var emptyState: some View {
         ContentUnavailableView{
             Label("No accounts yet", systemImage: "gauge.with.dots.needle.33percent")

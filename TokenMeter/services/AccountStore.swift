@@ -11,7 +11,7 @@ import Foundation
 @MainActor
 final class AccountStore  {
     
-    //he store owns the accounts data and Data changes happen where the data lives.
+    //T he store owns the accounts data and Data changes happen where the data lives.
     private(set) var accounts: [Account]
     
     private let services: [Provider: UsageService]
