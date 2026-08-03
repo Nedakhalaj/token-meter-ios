@@ -34,9 +34,11 @@ struct UsageWindowRow: View {
             }
             .frame(height: 8)
             
-            Text("resets \(window.resetsAt, style: .relative)")
-                .font(.caption)
-                .foregroundStyle(.tertiary)
+            if let resetsAt = window.resetsAt {
+                Text("resets \(resetsAt, style: .relative)")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
         }
         
     }

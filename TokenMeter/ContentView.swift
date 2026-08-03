@@ -12,10 +12,14 @@ struct ContentView: View {
                                                       services: [
                                                         .claude: MockUsageService(provider: .claude),
                                                         .codex: MockUsageService(provider: .codex),
+                                                        .openRouter: OpenRouterService()
                                                       ]))
+    
+   
     
     var body: some View {
         DashboardView(viewModel: viewModel)
+        
     }
 }
 

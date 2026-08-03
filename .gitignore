@@ -1,0 +1,17 @@
+# ---- Xcode build junk ----
+build/
+DerivedData/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# ---- macOS junk ----
+.DS_Store
+
+# ---- Swift Package Manager ----
+.build/
+.swiftpm/
+
+# ---- Secrets (never commit these) ----
+Secrets.swift
+*.env

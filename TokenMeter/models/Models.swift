@@ -31,11 +31,11 @@ struct UsageWindow:Identifiable {
     let id = UUID()
     let label: String
     let fraction: Double
-    let resetsAt: Date
+    let resetsAt: Date?
 }
 
 struct Account: Identifiable {
-    let id :UUID
+    let id : UUID
     let provider: Provider
     let nickname: String
     let planName: String
