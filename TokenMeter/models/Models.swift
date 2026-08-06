@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Provider: String, CaseIterable {
+enum Provider: String, CaseIterable, Codable {
     case claude
     case codex
     case openRouter
@@ -27,14 +27,14 @@ enum Provider: String, CaseIterable {
     }
 }
 
-struct UsageWindow:Identifiable {
-    let id = UUID()
+struct UsageWindow:Identifiable, Codable {
+    var id = UUID()
     let label: String
     let fraction: Double
     let resetsAt: Date?
 }
 
-struct Account: Identifiable {
+struct Account: Identifiable, Codable {
     let id : UUID
     let provider: Provider
     let nickname: String
@@ -59,7 +59,11 @@ extension Account {
     ]
     
      func replacingWindows(with newWindows: [UsageWindow]) -> Account {
-         Account( provider: provider, nickname: nickname, planName: planName, windows: newWindows)
+         Account( id: id, provider: provider, nickname: nickname, planName: planName, windows: newWindows)
+    }
+    
+    func renamed(to newName: String) -> Account {
+        Account(id: id, provider: provider, nickname: newName, planName: planName, windows: windows)
     }
     
 }

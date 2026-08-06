@@ -48,7 +48,7 @@ struct AddAccountView: View {
             }
             
             .sheet(isPresented: $showingKey) {
-                ApiKeyView { key in
+                ApiKeyView{ key in
                     onConnectOpenRouter(key)   // hand the key up to the dashboard
                     dismiss()                  // close the picker too
                 }

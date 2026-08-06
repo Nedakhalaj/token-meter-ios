@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel = DashboardViewModel(repository: AccountStore(accounts: Account.sample,
-                                                      services: [
-                                                        .claude: MockUsageService(provider: .claude),
-                                                        .codex: MockUsageService(provider: .codex),
-                                                        .openRouter: OpenRouterService()
-                                                      ]))
-    
+    @State private var viewModel = DashboardViewModel(
+        repository: AccountStore(services: [
+            .claude: MockUsageService(provider: .claude),
+            .codex: MockUsageService(provider: .codex),
+            .openRouter: OpenRouterService()
+        ])
+    )
+
    
     
     var body: some View {
