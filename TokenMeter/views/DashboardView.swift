@@ -20,9 +20,10 @@ struct DashboardView: View {
                     ScrollView(){
                         LazyVStack(spacing: 16){
                             ForEach(viewModel.accounts) { account in
-                                AccountCard(account: account){
-                                    viewModel.remove(account)
-                                }
+                                AccountCard(account: account,
+                                            onRemove: { viewModel.remove(account) },
+                                            onRefresh: { viewModel.refreshAccount(account) }, onRename: {newName in viewModel.rename(account, to: newName)}
+                                            )
                             }
                         }
                         .padding(16)
@@ -61,7 +62,7 @@ struct DashboardView: View {
             Text("Connect a provider to start watching your quota.")
         }actions: {
             Button("Add your first account"){
-                //TODO: add account
+                showingAdd = true
             }
             .buttonStyle(.borderedProminent)
         }

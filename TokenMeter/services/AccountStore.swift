@@ -11,7 +11,7 @@ import Foundation
 @MainActor
 final class AccountStore  {
     
-    //T he store owns the accounts data and Data changes happen where the data lives.
+    //The store owns the accounts data and Data changes happen where the data lives.
     private(set) var accounts: [Account]
     
     private let services: [Provider: UsageService]
@@ -21,12 +21,25 @@ final class AccountStore  {
         self.services = services
     }
     
+    init(services: [Provider : UsageService] = [:]){
+        self.services = services
+        self.accounts = AccountFileStore.load()
+    }
+    
+    private func persist() {
+        AccountFileStore.save(accounts)
+    }
+    
+    
     func remove(_ account : Account) {
         accounts.removeAll(where: { $0.id == account.id })
+        KeychainHelper.delete(for: account.id.uuidString)
+        persist()
     }
      
     func add(_ account: Account)  {
         accounts.append(account)
+        persist()
     }
      
     func refresh(account: Account) async throws  {
@@ -34,6 +47,7 @@ final class AccountStore  {
         let windows =  try await service.fetchUsage(for: account)
         guard let i = accounts.firstIndex(where: { $0.id == account.id }) else { return }
         accounts[i] = account.replacingWindows(with: windows)
+        persist()
     }
     
     func refreshAll() async {
@@ -44,6 +58,12 @@ final class AccountStore  {
                 }
             }
         }
+    }
+    
+    func rename(_ account: Account, to newName: String) {
+        guard let i = accounts.firstIndex(where: { $0.id == account.id }) else { return }
+        accounts[i] = account.renamed(to: newName)
+        persist()
     }
     
     

@@ -46,5 +46,15 @@ final class DashboardViewModel {
         }
     }
     
+    func refreshAccount(_ account: Account) {
+        Task { try? await repository.refresh(account: account) }
+    }
+    
+    func rename(_ account: Account, to newName: String) {
+        repository.rename(account, to: newName)
+    }
+
+
+    
 }
 
