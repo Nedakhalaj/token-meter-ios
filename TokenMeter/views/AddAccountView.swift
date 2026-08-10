@@ -18,7 +18,7 @@ struct AddAccountView: View {
                 ForEach(Provider.allCases, id: \.self) { provider in
                     Button {
                         if provider == .openRouter {
-                            showingKey = true          // open the key screen
+                            showingKey = true           
                         } else {
                             onPick(provider)           // mock: add immediately
                             dismiss()

@@ -18,7 +18,7 @@ enum AccountFileStore {
             let data = try JSONEncoder().encode(accounts)
             try data.write(to: fileURL)
         }catch{
-            print("Couldnt save accounts:", error)
+            print("Couldn't save accounts:", error)
         }
     }
     

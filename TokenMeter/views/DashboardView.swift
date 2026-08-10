@@ -10,6 +10,7 @@ import SwiftUI
 struct DashboardView: View {
     let viewModel: DashboardViewModel
     @State private var showingAdd = false
+    @State private var reconnectingAccount: Account?
     
     var body:some View {
         NavigationStack{
@@ -22,8 +23,8 @@ struct DashboardView: View {
                             ForEach(viewModel.accounts) { account in
                                 AccountCard(account: account,
                                             onRemove: { viewModel.remove(account) },
-                                            onRefresh: { viewModel.refreshAccount(account) }, onRename: {newName in viewModel.rename(account, to: newName)}
-                                            )
+                                            onRefresh: { viewModel.refreshAccount(account) }, onRename: {newName in viewModel.rename(account, to: newName)}, onReconnect: {reconnectingAccount = account}, state: viewModel.state(for: account)
+                                )
                             }
                         }
                         .padding(16)
@@ -41,7 +42,7 @@ struct DashboardView: View {
                     }label: {
                         Image(systemName: "plus")
                     }
-                
+                    
                 }
             }
         }
@@ -54,7 +55,14 @@ struct DashboardView: View {
                     viewModel.addOpenRouter(apiKey: key)
                 }
             )
-        }    }
+        }
+        
+        .sheet(item: $reconnectingAccount){account in
+            ApiKeyView{ key in
+                viewModel.reconnect(account: account, apiKey: key)
+            }
+        }
+    }
     private var emptyState: some View {
         ContentUnavailableView{
             Label("No accounts yet", systemImage: "gauge.with.dots.needle.33percent")
@@ -75,5 +83,5 @@ struct DashboardView: View {
 
 #Preview("Empty") {
     DashboardView(viewModel: DashboardViewModel(repository: AccountStore(accounts: Account.sample)))
-
+    
 }
