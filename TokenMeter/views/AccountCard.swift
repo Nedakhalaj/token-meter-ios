@@ -69,7 +69,7 @@ struct AccountCard: View {
                     Text(reason)
                         .font(.caption).foregroundStyle(.red)
                     Spacer()
-                    Button("Reconnet") { onReconnect() }.font(.caption)
+                    Button("Reconnect") { onReconnect() }.font(.caption)
                 }
             case .loaded, .none:
                 EmptyView()
