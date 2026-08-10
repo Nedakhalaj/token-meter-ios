@@ -12,6 +12,8 @@ struct AccountCard: View {
     let onRemove: () -> Void
     let onRefresh: () -> Void
     let onRename: (String) -> Void
+    let onReconnect: () -> Void
+    let state: LoadState?
 
     @State private var showingRename = false  // is the alert up?
     @State private var draftName = ""         // the text being typed
@@ -41,6 +43,9 @@ struct AccountCard: View {
                         draftName = account.nickname
                         showingRename = true
                     }
+                    Button("Reconnect"){
+                        onReconnect()
+                    }
                     Button("Remove", role: .destructive) { onRemove() }
                 } label: {
                     Image(systemName: "ellipsis")
@@ -50,6 +55,24 @@ struct AccountCard: View {
 
             ForEach(account.windows) { window in
                 UsageWindowRow(window: window)
+            }
+            
+            switch state{
+            case .loading:
+                HStack(spacing: 8) {
+                    ProgressView()
+                    Text("Loading...").font(.caption).foregroundStyle(.secondary)
+                }
+            case .failed(let reason):
+                HStack(spacing: 8) {
+                    Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.red)
+                    Text(reason)
+                        .font(.caption).foregroundStyle(.red)
+                    Spacer()
+                    Button("Reconnet") { onReconnect() }.font(.caption)
+                }
+            case .loaded, .none:
+                EmptyView()
             }
         }
         .padding(16)
@@ -63,6 +86,6 @@ struct AccountCard: View {
 }
 
 #Preview {
-    AccountCard(account: Account.sample[0], onRemove: {}, onRefresh: {}, onRename: { _ in })
+    AccountCard(account: Account.sample[0], onRemove: {}, onRefresh: {}, onRename: { _ in }, onReconnect: {}, state: .loaded)
         .padding()
 }

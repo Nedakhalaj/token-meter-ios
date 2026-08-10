@@ -21,7 +21,10 @@ struct OpenRouterService: UsageService {
         var request = URLRequest(url: url)
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
 
-        let (data, _) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        if let http = response as? HTTPURLResponse, http.statusCode == 401 {
+            throw UsageError.invalidKey
+        }
         let decoded = try JSONDecoder().decode(OpenRouterCreditsResponse.self, from: data)
 
         let total = decoded.data.total_credits
@@ -34,4 +37,5 @@ struct OpenRouterService: UsageService {
 
 enum UsageError: Error {
     case missingKey
+    case invalidKey 
 }

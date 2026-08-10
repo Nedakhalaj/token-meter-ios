@@ -42,16 +42,26 @@ final class DashboardViewModel {
         KeychainHelper.save(apiKey, for: account.id.uuidString)
         repository.add(account)
         Task{
-            try? await repository.refresh(account: account)
+             await repository.refresh(account: account)
         }
     }
     
     func refreshAccount(_ account: Account) {
-        Task { try? await repository.refresh(account: account) }
+        Task {  await repository.refresh(account: account) }
     }
     
     func rename(_ account: Account, to newName: String) {
         repository.rename(account, to: newName)
+    }
+    
+    func state(for account: Account) -> LoadState? {
+        repository.states[account.id]
+    }
+    
+    func reconnect(account: Account, apiKey: String) {
+        KeychainHelper.save(apiKey, for:    account.id.uuidString
+        )
+        Task {  await repository.refresh(account: account) }
     }
 
 
