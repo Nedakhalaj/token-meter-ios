@@ -8,20 +8,24 @@ import SwiftUI
 
 struct AddAccountView: View {
     let onPick: (Provider) -> Void                 // mock providers 
-    let onConnectOpenRouter: (String) -> Void      // the real one
+    let onConnectOpenRouter: (String) -> Void
+    let onConnectClaude: (String) -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var showingKey = false          // is the key sheet up?
-
+    @State private var showingClaudeLogin = false
+    
+    
     var body: some View {
         NavigationStack {
             List {
                 ForEach(Provider.allCases, id: \.self) { provider in
                     Button {
-                        if provider == .openRouter {
-                            showingKey = true           
-                        } else {
-                            onPick(provider)           // mock: add immediately
-                            dismiss()
+                       switch provider {
+                            case .openRouter:
+                           showingKey = true
+                           case .claude:
+                           showingClaudeLogin = true
+                       default: onPick(provider); dismiss()
                         }
                     } label: {
                         HStack(spacing: 12) {
@@ -53,6 +57,12 @@ struct AddAccountView: View {
                     dismiss()                  // close the picker too
                 }
             }
+            .sheet(isPresented: $showingClaudeLogin) {
+                ClaudeLoginScreen{ sessionKey in
+                    onConnectClaude(sessionKey)
+                    dismiss()
+                }
+            }
         }
     }
 }
@@ -60,5 +70,5 @@ struct AddAccountView: View {
                   
 
 #Preview {
-    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in })
+    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in }, onConnectClaude: { _ in })
 }
