@@ -53,7 +53,7 @@ struct DashboardView: View {
                 },
                 onConnectOpenRouter: { key in
                     viewModel.addOpenRouter(apiKey: key)
-                }
+                }, onConnectClaude: {key in viewModel.addClaude(sessionKey: key)}
             )
         }
         

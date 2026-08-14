@@ -46,6 +46,15 @@ final class DashboardViewModel {
         }
     }
     
+    func addClaude(sessionKey: String){
+        let account = Account(provider: .claude, nickname: "Claude", planName: "pay-as-you-go", windows: [])
+        KeychainHelper.save(sessionKey, for: account.id.uuidString)
+        repository.add(account)
+        Task{
+            await repository.refresh(account: account)
+        }
+    }
+    
     func refreshAccount(_ account: Account) {
         Task {  await repository.refresh(account: account) }
     }
