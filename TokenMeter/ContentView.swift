@@ -15,13 +15,16 @@ struct ContentView: View {
             .openRouter: OpenRouterService()
         ])
     )
-
-   
     
+    @AppStorage("theme") private var theme: ThemeMode = .system
+  
     var body: some View {
         DashboardView(viewModel: viewModel)
+            .preferredColorScheme(theme.colorScheme)
         
     }
+    
+  
 }
 
 #Preview {
