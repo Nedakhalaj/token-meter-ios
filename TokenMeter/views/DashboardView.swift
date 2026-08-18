@@ -11,6 +11,7 @@ struct DashboardView: View {
     let viewModel: DashboardViewModel
     @State private var showingAdd = false
     @State private var reconnectingAccount: Account?
+    @State private var isSetting = false
     
     var body:some View {
         NavigationStack{
@@ -35,12 +36,21 @@ struct DashboardView: View {
                 }
             }
             .navigationTitle("Token Meter")
-            .toolbar{
-                ToolbarItem(placement: .primaryAction){
-                    Button{
-                        showingAdd = true
-                    }label: {
-                        Image(systemName: "plus")
+            .toolbar(){
+                ToolbarItem{
+                    HStack {
+                        Button{
+                            showingAdd = true
+                        }label: {
+                            Image(systemName: "plus")
+                        }
+                        
+                        
+                        Button{
+                            isSetting = true
+                        }label: {
+                            Image(systemName: "gearshape")
+                        }
                     }
                     
                 }
@@ -55,6 +65,9 @@ struct DashboardView: View {
                     viewModel.addOpenRouter(apiKey: key)
                 }, onConnectClaude: {key in viewModel.addClaude(sessionKey: key)}
             )
+        }
+        .sheet(isPresented: $isSetting){
+           SettingView()
         }
         
         .sheet(item: $reconnectingAccount){account in
