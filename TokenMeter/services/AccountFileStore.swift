@@ -10,8 +10,11 @@ import Foundation
 enum AccountFileStore {
     
     private static var fileURL: URL {
-        URL.documentsDirectory.appending(path: "accounts.json")
+        let shared = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: "group.nedakhalaj.TokenMeter")!
+        return shared.appending(path: "accounts.json")
     }
+
     
     static func save (_ accounts: [Account]) {
         do{
