@@ -28,11 +28,13 @@ struct AccountCard: View {
                     .background(account.provider.accent, in: RoundedRectangle(cornerRadius: 10))
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("\(account.provider.displayName) . \(account.nickname)")
-                        .font(.headline)
-                    Text(account.planName)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                    Text(account.provider.displayName)            .font(.headline)
+
+                    if account.nickname != account.provider.displayName {
+                            Text(account.nickname)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                 }
 
                 Spacer()
