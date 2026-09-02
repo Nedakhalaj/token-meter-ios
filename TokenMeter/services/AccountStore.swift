@@ -66,7 +66,7 @@ final class AccountStore  {
         switch error{
             case UsageError.missingKey: return "No API key found - reconnect"
             case UsageError.invalidKey: return "Invalid API key - reconnect"
-        default: return "Couldn't reftrsh"
+        default: return "Couldn't refresh"
         }
             
         }

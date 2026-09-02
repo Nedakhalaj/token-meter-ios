@@ -12,7 +12,7 @@ import Foundation
 final class DashboardViewModel {
     
     let repository: AccountStore
-    var osRefreshing = false
+    
     
     init(repository: AccountStore) {
         self.repository = repository
@@ -23,9 +23,7 @@ final class DashboardViewModel {
     }
     
      func refresh() async {
-        osRefreshing = true
          await repository.refreshAll()
-        osRefreshing = false
     }
     
     func remove(_ account: Account){
