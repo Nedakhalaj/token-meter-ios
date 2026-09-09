@@ -20,6 +20,13 @@
 			remoteGlobalIDString = 812372FB3035D1CC00842886;
 			remoteInfo = TokenMeterWidgetExtension;
 		};
+		81999A7A30489ACB006FA868 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 812370FB300F851700842886 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 81237102300F851700842886;
+			remoteInfo = TokenMeter;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +49,7 @@
 		812372E03035CE8C00842886 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		812372FC3035D1CC00842886 /* TokenMeterWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TokenMeterWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		812373133035F44600842886 /* TokenMeterWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TokenMeterWidgetExtension.entitlements; sourceTree = "<group>"; };
+		81999A7630489ACB006FA868 /* TokenMeterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TokenMeterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -80,6 +88,11 @@
 			path = TokenMeterWidget;
 			sourceTree = "<group>";
 		};
+		81999A7730489ACB006FA868 /* TokenMeterTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TokenMeterTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +112,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		81999A7330489ACB006FA868 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -108,6 +128,7 @@
 				812373133035F44600842886 /* TokenMeterWidgetExtension.entitlements */,
 				81237105300F851700842886 /* TokenMeter */,
 				812372FF3035D1CC00842886 /* TokenMeterWidget */,
+				81999A7730489ACB006FA868 /* TokenMeterTests */,
 				812372DD3035CE8C00842886 /* Frameworks */,
 				81237104300F851700842886 /* Products */,
 			);
@@ -118,6 +139,7 @@
 			children = (
 				81237103300F851700842886 /* TokenMeter.app */,
 				812372FC3035D1CC00842886 /* TokenMeterWidgetExtension.appex */,
+				81999A7630489ACB006FA868 /* TokenMeterTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,6 +202,29 @@
 			productReference = 812372FC3035D1CC00842886 /* TokenMeterWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		81999A7530489ACB006FA868 /* TokenMeterTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81999A7E30489ACB006FA868 /* Build configuration list for PBXNativeTarget "TokenMeterTests" */;
+			buildPhases = (
+				81999A7230489ACB006FA868 /* Sources */,
+				81999A7330489ACB006FA868 /* Frameworks */,
+				81999A7430489ACB006FA868 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				81999A7B30489ACB006FA868 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				81999A7730489ACB006FA868 /* TokenMeterTests */,
+			);
+			name = TokenMeterTests;
+			packageProductDependencies = (
+			);
+			productName = TokenMeterTests;
+			productReference = 81999A7630489ACB006FA868 /* TokenMeterTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,7 +232,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2650;
+				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
 					81237102300F851700842886 = {
@@ -195,6 +240,10 @@
 					};
 					812372FB3035D1CC00842886 = {
 						CreatedOnToolsVersion = 26.5;
+					};
+					81999A7530489ACB006FA868 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 81237102300F851700842886;
 					};
 				};
 			};
@@ -214,6 +263,7 @@
 			targets = (
 				81237102300F851700842886 /* TokenMeter */,
 				812372FB3035D1CC00842886 /* TokenMeterWidgetExtension */,
+				81999A7530489ACB006FA868 /* TokenMeterTests */,
 			);
 		};
 /* End PBXProject section */
@@ -227,6 +277,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		812372FA3035D1CC00842886 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81999A7430489ACB006FA868 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -250,6 +307,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		81999A7230489ACB006FA868 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -257,6 +321,11 @@
 			isa = PBXTargetDependency;
 			target = 812372FB3035D1CC00842886 /* TokenMeterWidgetExtension */;
 			targetProxy = 8123730B3035D1CD00842886 /* PBXContainerItemProxy */;
+		};
+		81999A7B30489ACB006FA868 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 81237102300F851700842886 /* TokenMeter */;
+			targetProxy = 81999A7A30489ACB006FA868 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -508,6 +577,46 @@
 			};
 			name = Release;
 		};
+		81999A7C30489ACB006FA868 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nedakhalaj.TokenMeterTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TokenMeter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TokenMeter";
+			};
+			name = Debug;
+		};
+		81999A7D30489ACB006FA868 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nedakhalaj.TokenMeterTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TokenMeter.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TokenMeter";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -534,6 +643,15 @@
 			buildConfigurations = (
 				812373103035D1CD00842886 /* Debug */,
 				812373113035D1CD00842886 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		81999A7E30489ACB006FA868 /* Build configuration list for PBXNativeTarget "TokenMeterTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				81999A7C30489ACB006FA868 /* Debug */,
+				81999A7D30489ACB006FA868 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
