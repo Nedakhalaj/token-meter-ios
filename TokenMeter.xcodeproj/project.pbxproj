@@ -69,12 +69,20 @@
 			);
 			target = 812372FB3035D1CC00842886 /* TokenMeterWidgetExtension */;
 		};
+		81999B183052C082006FA868 /* Exceptions for "TokenMeter" folder in "TokenMeter" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 81237102300F851700842886 /* TokenMeter */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		81237105300F851700842886 /* TokenMeter */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				81999B183052C082006FA868 /* Exceptions for "TokenMeter" folder in "TokenMeter" target */,
 				81237315303616B100842886 /* Exceptions for "TokenMeter" folder in "TokenMeterWidgetExtension" target */,
 			);
 			path = TokenMeter;
@@ -460,6 +468,10 @@
 				DEVELOPMENT_TEAM = 2ABMPUQ29Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TokenMeter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Token Meter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Royan. All rights reserved.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -493,6 +505,10 @@
 				DEVELOPMENT_TEAM = 2ABMPUQ29Z;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TokenMeter/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Token Meter";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2026 Royan. All rights reserved.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
