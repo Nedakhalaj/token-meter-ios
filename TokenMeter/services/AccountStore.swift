@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import WidgetKit
 
 @Observable
 @MainActor
@@ -30,6 +31,7 @@ final class AccountStore  {
     
     private func persist() {
         AccountFileStore.save(accounts)
+        WidgetCenter.shared.reloadAllTimelines()
     }
     
     
@@ -88,6 +90,6 @@ final class AccountStore  {
         persist()
     }
     
-    
+   
 }
 
