@@ -22,7 +22,7 @@ extension Provider{
         case .claude: return Color(red: 0.85, green: 0.45, blue: 0.25)
         case .codex: return Color(red: 0.10, green: 0.65, blue: 0.55)
         case .openRouter: return Color(red: 0.35, green: 0.45, blue: 0.90)
-        case .googleaDrive: return Color(red: 0.95, green: 0.75, blue: 0.20)
+        case .googleDrive: return Color(red: 0.95, green: 0.75, blue: 0.20)
         }
     }
     

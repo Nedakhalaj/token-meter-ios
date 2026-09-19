@@ -13,6 +13,7 @@ struct AddAccountView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showingKey = false          // is the key sheet up?
     @State private var showingClaudeLogin = false
+    @State private var googleAuth = GoogleAuthService()
     
     
     var body: some View {
@@ -25,6 +26,16 @@ struct AddAccountView: View {
                            showingKey = true
                            case .claude:
                            showingClaudeLogin = true
+                       case .googleDrive:
+                           Task{
+                               do{
+                                   let result = try await googleAuth.authorize()
+                                   print("✅ CODE:", result.code)
+                                   print("✅ VERIFIER:", result.verifier)
+                               }catch {
+                                   print("❌ FAILED:", error)
+                               }
+                           }
                        default: onPick(provider); dismiss()
                         }
                     } label: {
