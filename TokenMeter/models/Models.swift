@@ -11,7 +11,7 @@ enum Provider: String, CaseIterable, Codable {
     case claude
     case codex
     case openRouter
-    case googleaDrive
+    case googleDrive
     
     var displayName: String {
         switch self {
@@ -21,7 +21,7 @@ enum Provider: String, CaseIterable, Codable {
             return "Codex"
         case .openRouter:
             return "OpenRouter"
-        case .googleaDrive:
+        case .googleDrive:
             return "Google Drive"
         }
     }

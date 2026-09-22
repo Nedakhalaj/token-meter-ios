@@ -15,3 +15,6 @@ DerivedData/
 # ---- Secrets (never commit these) ----
 Secrets.swift
 *.env
+
+# ---- Claude Code ----
+.claude/settings.local.json

@@ -1,3 +1,5 @@
+// xcode: set sdk=iOS
+
 //
 //  DashboardViewModel.swift
 //  TokenMeter
@@ -52,6 +54,15 @@ final class DashboardViewModel {
             await repository.refresh(account: account)
         }
     }
+    
+    func addGoogleDrive(refreshToken: String) {
+        let account = Account(provider: .googleDrive, nickname: "Google Drive",
+                              planName: "-", windows: [])
+        KeychainHelper.save(refreshToken, for: account.id.uuidString)
+        repository.add(account)
+        Task { await repository.refresh(account: account) }
+    }
+
     
     func refreshAccount(_ account: Account) {
         Task {  await repository.refresh(account: account) }

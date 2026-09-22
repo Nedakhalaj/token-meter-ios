@@ -12,7 +12,8 @@ struct ContentView: View {
         repository: AccountStore(services: [
             .claude: ClaudeService(),
             .codex: MockUsageService(provider: .codex),
-            .openRouter: OpenRouterService()
+            .openRouter: OpenRouterService(),
+            .googleDrive: GoogleDriveService() 
         ])
     )
     
