@@ -11,7 +11,9 @@ import AuthenticationServices
 enum GoogleAuthError: Error {
     case noCallback
     case noCode
+    case tokenExchangeFailed
 }
+
 
 /// What we get back from the login screen.
 struct GoogleAuthCode {
@@ -19,10 +21,17 @@ struct GoogleAuthCode {
     let verifier: String
 }
 
+
+enum GoogleOAuth {
+    static let clientID = "566157747328-3k56ek5nhc85lof3oq0o3fo9sh2jmqgo.apps.googleusercontent.com"
+}
+
+
+
 @MainActor
 final class GoogleAuthService: NSObject {
 
-    private let clientID = "566157747328-3k56ek5nhc85lof3oq0o3fo9sh2jmqgo.apps.googleusercontent.com"
+    
     private let scope = "https://www.googleapis.com/auth/drive.file"
 
     private let redirectScheme = "com.googleusercontent.apps.566157747328-3k56ek5nhc85lof3oq0o3fo9sh2jmqgo"
@@ -36,7 +45,7 @@ final class GoogleAuthService: NSObject {
 
         var components = URLComponents(string: "https://accounts.google.com/o/oauth2/v2/auth")!
         components.queryItems = [
-            URLQueryItem(name: "client_id", value: clientID),
+            URLQueryItem(name: "client_id", value: GoogleOAuth.clientID),
             URLQueryItem(name: "redirect_uri", value: redirectURI),
             URLQueryItem(name: "response_type", value: "code"),
             URLQueryItem(name: "scope", value: scope),
@@ -73,6 +82,33 @@ final class GoogleAuthService: NSObject {
             self.session = session
         }
     }
+    
+    func exchange(_ auth: GoogleAuthCode) async throws -> GoogleTokenResponse {
+        var request = URLRequest(url: URL(string: "https://oauth2.googleapis.com/token")!)
+        request.httpMethod = "POST"
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+        var form = URLComponents()
+        form.queryItems = [
+            URLQueryItem(name: "client_id",     value: GoogleOAuth.clientID),
+            URLQueryItem(name: "code",          value: auth.code),
+            URLQueryItem(name: "code_verifier", value: auth.verifier),
+            URLQueryItem(name: "grant_type",    value: "authorization_code"),
+            URLQueryItem(name: "redirect_uri",  value: redirectURI)
+        ]
+        request.httpBody = form.percentEncodedQuery.map { Data($0.utf8) }
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
+            print("❌ token exchange:", String(data: data, encoding: .utf8) ?? "")
+            throw GoogleAuthError.tokenExchangeFailed
+        }
+
+        return try JSONDecoder().decode(GoogleTokenResponse.self, from: data)
+    }
+
+    
 }
 
 extension GoogleAuthService: ASWebAuthenticationPresentationContextProviding {

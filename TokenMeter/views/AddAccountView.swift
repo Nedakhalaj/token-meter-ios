@@ -10,6 +10,8 @@ struct AddAccountView: View {
     let onPick: (Provider) -> Void                 // mock providers 
     let onConnectOpenRouter: (String) -> Void
     let onConnectClaude: (String) -> Void
+    let onConnectGoogleDrive: (String) -> Void
+
     @Environment(\.dismiss) private var dismiss
     @State private var showingKey = false          // is the key sheet up?
     @State private var showingClaudeLogin = false
@@ -27,15 +29,18 @@ struct AddAccountView: View {
                            case .claude:
                            showingClaudeLogin = true
                        case .googleDrive:
-                           Task{
-                               do{
+                           Task {
+                               do {
                                    let result = try await googleAuth.authorize()
-                                   print("✅ CODE:", result.code)
-                                   print("✅ VERIFIER:", result.verifier)
-                               }catch {
-                                   print("❌ FAILED:", error)
+                                   let tokens  = try await googleAuth.exchange(result)
+                                   guard let refresh = tokens.refresh_token else { return }
+                                   onConnectGoogleDrive(refresh)
+                                   dismiss()
+                               } catch {
+                                   print("❌ Google Drive connect failed:", error)
                                }
                            }
+
                        default: onPick(provider); dismiss()
                         }
                     } label: {
@@ -81,5 +86,5 @@ struct AddAccountView: View {
                   
 
 #Preview {
-    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in }, onConnectClaude: { _ in })
+    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in }, onConnectClaude: { _ in }, onConnectGoogleDrive: { _ in })
 }
