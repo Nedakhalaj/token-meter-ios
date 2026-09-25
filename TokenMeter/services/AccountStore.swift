@@ -41,10 +41,20 @@ final class AccountStore  {
         persist()
     }
      
-    func add(_ account: Account)  {
+    func add(_ account: Account, secret: String? = nil) {
+        if let secret {
+            KeychainHelper.save(secret, for: account.id.uuidString)
+        }
         accounts.append(account)
         persist()
     }
+    
+    
+    func updateSecret(_ secret: String, for account: Account) {
+        KeychainHelper.save(secret, for: account.id.uuidString)
+    }
+    
+    
      
     func refresh(account: Account) async  {
         states[account.id] = .loading

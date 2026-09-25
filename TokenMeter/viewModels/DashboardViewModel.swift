@@ -39,30 +39,24 @@ final class DashboardViewModel {
     
     func addOpenRouter(apiKey: String){
         let account = Account(provider: .openRouter, nickname: "OpenRouter", planName: "pay-as-you-go", windows: [])
-        KeychainHelper.save(apiKey, for: account.id.uuidString)
-        repository.add(account)
-        Task{
-             await repository.refresh(account: account)
-        }
+        repository.add(account, secret: apiKey)
+        Task { await repository.refresh(account: account) }
     }
+        
     
     func addClaude(sessionKey: String){
         let account = Account(provider: .claude, nickname: "Claude", planName: "pay-as-you-go", windows: [])
-        KeychainHelper.save(sessionKey, for: account.id.uuidString)
-        repository.add(account)
-        Task{
-            await repository.refresh(account: account)
-        }
-    }
-    
-    func addGoogleDrive(refreshToken: String) {
-        let account = Account(provider: .googleDrive, nickname: "Google Drive",
-                              planName: "-", windows: [])
-        KeychainHelper.save(refreshToken, for: account.id.uuidString)
-        repository.add(account)
+        repository.add(account, secret: sessionKey)
         Task { await repository.refresh(account: account) }
     }
-
+    
+        
+    func addGoogleDrive(refreshToken: String) {
+        let account = Account(provider: .googleDrive, nickname: "Google Drive", planName: "-", windows: [])
+        repository.add(account, secret: refreshToken)
+        Task { await repository.refresh(account: account) }
+    }
+    
     
     func refreshAccount(_ account: Account) {
         Task {  await repository.refresh(account: account) }
@@ -76,12 +70,11 @@ final class DashboardViewModel {
         repository.states[account.id]
     }
     
+    
     func reconnect(account: Account, apiKey: String) {
-        KeychainHelper.save(apiKey, for:    account.id.uuidString
-        )
-        Task {  await repository.refresh(account: account) }
+        repository.updateSecret(apiKey, for: account)
+        Task { await repository.refresh(account: account) }
     }
-
 
     
 }

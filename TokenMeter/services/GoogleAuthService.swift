@@ -78,6 +78,7 @@ final class GoogleAuthService: NSObject {
                 }
             }
             session.presentationContextProvider = self
+            session.prefersEphemeralWebBrowserSession = true
             session.start()
             self.session = session
         }
