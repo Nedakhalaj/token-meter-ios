@@ -1,6 +1,7 @@
 # Token Meter
 
-An iOS app that shows how much of your AI usage quota you've used, across **Claude** and **OpenRouter**, as simple progress bars on a dashboard and a home-screen widget.
+An iOS app that shows how much of your AI usage quota you've used, across **Claude**, **OpenRouter** and **Google Drive**, as simple progress bars on a dashboard and a home-screen widget.
+
 
 Everything runs on-device. There's no backend and no account system of its own: you connect your own providers, and their credentials are stored only on your phone.
 
@@ -22,8 +23,9 @@ Everything runs on-device. There's no backend and no account system of its own: 
 |---|---|---|
 | **OpenRouter** | Paste an API key | Working |
 | **Claude** | In-app web sign-in (WKWebView), captures the session cookie | Working |
+| **Google Drive** | OAuth 2.0 with PKCE (ASWebAuthenticationSession), reads storage quota | Working |
 | Codex (OpenAI) | OAuth device code | Planned |
-| Google Drive | OAuth device code | Planned |
+
 
 Both live endpoints are unofficial. The app reads only the user's own usage and degrades to an error state rather than crashing when a response changes.
 
@@ -51,7 +53,8 @@ Some deliberate choices:
 
 ## Tech
 
-Swift, SwiftUI, URLSession, Codable, Keychain, WKWebView, WidgetKit, App Groups, MVVM
+Swift, SwiftUI, URLSession, Codable, Keychain, WKWebView, ASWebAuthenticationSession, CryptoKit, WidgetKit, App Groups, MVVM
+
 
 ## Requirements
 
@@ -87,9 +90,10 @@ TokenMeterWidget/      WidgetKit extension (timeline provider + widget view)
 
 ## Status & roadmap
 
-Working: OpenRouter, Claude, persistence, error handling + reconnect, settings, home-screen widget.
+Working: OpenRouter, Claude, Google Drive, persistence, error handling + reconnect, settings, home-screen widget.
 
-Planned: Codex and Google Drive providers, and App Store release prep.
+Planned: Codex provider, and App Store release prep.
+
 
 ## Note
 
