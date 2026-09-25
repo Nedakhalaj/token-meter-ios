@@ -71,8 +71,8 @@ final class DashboardViewModel {
     }
     
     
-    func reconnect(account: Account, apiKey: String) {
-        repository.updateSecret(apiKey, for: account)
+    func reconnect(account: Account, secret: String) {
+        repository.updateSecret(secret, for: account)
         Task { await repository.refresh(account: account) }
     }
 
