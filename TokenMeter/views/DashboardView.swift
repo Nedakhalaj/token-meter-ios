@@ -72,7 +72,7 @@ struct DashboardView: View {
         
         .sheet(item: $reconnectingAccount){account in
             ApiKeyView{ key in
-                viewModel.reconnect(account: account, apiKey: key)
+                viewModel.reconnect(account: account, secret: key)
             }
         }
     }
