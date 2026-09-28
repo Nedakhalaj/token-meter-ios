@@ -11,7 +11,7 @@ struct ContentView: View {
     @State private var viewModel = DashboardViewModel(
         repository: AccountStore(services: [
             .claude: ClaudeService(),
-            .codex: MockUsageService(provider: .codex),
+            .codex: CodexService(),
             .openRouter: OpenRouterService(),
             .googleDrive: GoogleDriveService() 
         ])

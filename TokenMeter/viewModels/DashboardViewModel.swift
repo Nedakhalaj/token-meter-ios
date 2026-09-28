@@ -57,6 +57,12 @@ final class DashboardViewModel {
         Task { await repository.refresh(account: account) }
     }
     
+    func addCodex(secret: String) {
+        let account = Account(provider: .codex, nickname: "Codex", planName: "-", windows: [])
+        repository.add(account, secret: secret)
+        Task { await repository.refresh(account: account) }
+    }
+
     
     func refreshAccount(_ account: Account) {
         Task {  await repository.refresh(account: account) }

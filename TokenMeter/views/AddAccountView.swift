@@ -11,11 +11,13 @@ struct AddAccountView: View {
     let onConnectOpenRouter: (String) -> Void
     let onConnectClaude: (String) -> Void
     let onConnectGoogleDrive: (String) -> Void
-
+    let onConnectCodex: (String) -> Void
+    
     @Environment(\.dismiss) private var dismiss
     @State private var showingKey = false          // is the key sheet up?
     @State private var showingClaudeLogin = false
     @State private var googleAuth = GoogleAuthService()
+    @State private var showingCodexLogin = false
     
     
     var body: some View {
@@ -40,6 +42,8 @@ struct AddAccountView: View {
                                    print("❌ Google Drive connect failed:", error)
                                }
                            }
+                       case .codex:
+                           showingCodexLogin = true
 
                        default: onPick(provider); dismiss()
                         }
@@ -79,6 +83,13 @@ struct AddAccountView: View {
                     dismiss()
                 }
             }
+            .sheet(isPresented: $showingCodexLogin) {
+                CodexLoginScreen { secret in
+                    onConnectCodex(secret)
+                    dismiss()
+                }
+            }
+
         }
     }
 }
@@ -86,5 +97,5 @@ struct AddAccountView: View {
                   
 
 #Preview {
-    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in }, onConnectClaude: { _ in }, onConnectGoogleDrive: { _ in })
+    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in }, onConnectClaude: { _ in }, onConnectGoogleDrive: { _ in }, onConnectCodex: { _ in })
 }

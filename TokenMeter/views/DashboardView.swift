@@ -63,7 +63,8 @@ struct DashboardView: View {
                 },
                 onConnectOpenRouter: { key in
                     viewModel.addOpenRouter(apiKey: key)
-                }, onConnectClaude: {key in viewModel.addClaude(sessionKey: key)}, onConnectGoogleDrive: {token in viewModel.addGoogleDrive(refreshToken: token)}
+                }, onConnectClaude: {key in viewModel.addClaude(sessionKey: key)}, onConnectGoogleDrive: {token in viewModel.addGoogleDrive(refreshToken: token)},
+                onConnectCodex: { secret in viewModel.addCodex(secret: secret) }
             )
         }
         .sheet(isPresented: $isSetting){
