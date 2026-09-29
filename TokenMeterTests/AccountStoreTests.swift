@@ -26,7 +26,8 @@ struct AccountStoreTests{
         await store.refresh(account: account)
         
         //Assert
-        #expect(store.states[account.id] == .failed("Invalid API key - reconnect"))
+        #expect(store.states[account.id] == .failed("Sign-in expired - reconnect"))
+
         
     }
     

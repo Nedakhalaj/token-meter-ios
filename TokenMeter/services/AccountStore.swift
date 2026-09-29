@@ -76,8 +76,8 @@ final class AccountStore  {
     
     private func message(for error: Error) -> String {
         switch error{
-            case UsageError.missingKey: return "No API key found - reconnect"
-            case UsageError.invalidKey: return "Invalid API key - reconnect"
+        case UsageError.missingKey: return "Not signed in - reconnect"
+        case UsageError.invalidKey: return "Sign-in expired - reconnect"
         default: return "Couldn't refresh"
         }
             

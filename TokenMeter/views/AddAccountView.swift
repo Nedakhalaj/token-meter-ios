@@ -7,7 +7,6 @@
 import SwiftUI
 
 struct AddAccountView: View {
-    let onPick: (Provider) -> Void                 // mock providers 
     let onConnectOpenRouter: (String) -> Void
     let onConnectClaude: (String) -> Void
     let onConnectGoogleDrive: (String) -> Void
@@ -25,28 +24,24 @@ struct AddAccountView: View {
             List {
                 ForEach(Provider.allCases, id: \.self) { provider in
                     Button {
-                       switch provider {
-                            case .openRouter:
-                           showingKey = true
-                           case .claude:
-                           showingClaudeLogin = true
-                       case .googleDrive:
-                           Task {
-                               do {
-                                   let result = try await googleAuth.authorize()
-                                   let tokens  = try await googleAuth.exchange(result)
-                                   guard let refresh = tokens.refresh_token else { return }
-                                   onConnectGoogleDrive(refresh)
-                                   dismiss()
-                               } catch {
-                                   print("❌ Google Drive connect failed:", error)
-                               }
-                           }
-                       case .codex:
-                           showingCodexLogin = true
-
-                       default: onPick(provider); dismiss()
+                        switch provider {
+                        case .openRouter:
+                            showingKey = true
+                        case .claude:
+                            showingClaudeLogin = true
+                        case .googleDrive:
+                            Task {
+                                do {
+                                    onConnectGoogleDrive(try await googleAuth.signIn())
+                                    dismiss()
+                                } catch {
+                                    print("❌ Google Drive connect failed:", error)
+                                }
+                            }
+                        case .codex:
+                            showingCodexLogin = true
                         }
+                        
                     } label: {
                         HStack(spacing: 12) {
                             Text(provider.initial)
@@ -89,13 +84,13 @@ struct AddAccountView: View {
                     dismiss()
                 }
             }
-
+            
         }
     }
 }
 
-                  
+
 
 #Preview {
-    AddAccountView (onPick: { _ in }, onConnectOpenRouter: { _ in }, onConnectClaude: { _ in }, onConnectGoogleDrive: { _ in }, onConnectCodex: { _ in })
+    AddAccountView (onConnectOpenRouter: { _ in }, onConnectClaude: { _ in }, onConnectGoogleDrive: { _ in }, onConnectCodex: { _ in })
 }
