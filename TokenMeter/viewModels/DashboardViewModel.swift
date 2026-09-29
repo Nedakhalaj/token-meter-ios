@@ -32,10 +32,6 @@ final class DashboardViewModel {
         repository.remove(account)
     }
     
-    func add(provider: Provider){
-        let account = Account(provider: provider,nickname: "new", planName: "-", windows: [])
-        repository.add(account)
-    }
     
     func addOpenRouter(apiKey: String){
         let account = Account(provider: .openRouter, nickname: "OpenRouter", planName: "pay-as-you-go", windows: [])

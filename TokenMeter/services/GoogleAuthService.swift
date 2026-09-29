@@ -84,6 +84,15 @@ final class GoogleAuthService: NSObject {
         }
     }
     
+    /// The whole Google sign-in: login window, then token exchange. Returns the refresh token to store.
+    func signIn() async throws -> String {
+        let code = try await authorize()
+        let tokens = try await exchange(code)
+        guard let refresh = tokens.refresh_token else { throw GoogleAuthError.tokenExchangeFailed }
+        return refresh
+    }
+
+    
     func exchange(_ auth: GoogleAuthCode) async throws -> GoogleTokenResponse {
         var request = URLRequest(url: URL(string: "https://oauth2.googleapis.com/token")!)
         request.httpMethod = "POST"
