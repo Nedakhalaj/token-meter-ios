@@ -58,8 +58,8 @@ struct TokenMeterWidgetEntryView: View {
                             }
                         }
                         if let window = account.windows.first {
-                            ProgressView(value: window.fraction)
-                                .tint(barColor(for: window.fraction))
+                            UsageBar(fraction: window.fraction)
+
                         }
                     }
                 }
@@ -67,14 +67,7 @@ struct TokenMeterWidgetEntryView: View {
         }
     }
 
-    // The widget can't see Theme.swift, so it has its own copy of the color rule.
-    private func barColor(for fraction: Double) -> Color {
-        switch fraction {
-        case ..<0.5: return .green
-        case ..<0.8: return .orange
-        default:     return .red
-        }
-    }
+   
 }
 
 struct TokenMeterWidget: Widget {

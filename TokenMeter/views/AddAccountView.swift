@@ -21,44 +21,37 @@ struct AddAccountView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(Provider.allCases, id: \.self) { provider in
-                    Button {
-                        switch provider {
-                        case .openRouter:
-                            showingKey = true
-                        case .claude:
-                            showingClaudeLogin = true
-                        case .googleDrive:
-                            Task {
-                                do {
-                                    onConnectGoogleDrive(try await googleAuth.signIn())
-                                    dismiss()
-                                } catch {
-                                    print("❌ Google Drive connect failed:", error)
-                                }
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Pick a provider")
+                        .font(.title2.weight(.semibold))
+                    Text("Add as many accounts as you like, one per sign-in. Each one is read separately on the dashboard and widget.")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.secondaryText)
+
+                    VStack(spacing: 0) {
+                        ForEach(Provider.allCases, id: \.self) { provider in
+                            if provider != Provider.allCases.first {
+                                Divider().overlay(Theme.separator)
                             }
-                        case .codex:
-                            showingCodexLogin = true
-                        }
-                        
-                    } label: {
-                        HStack(spacing: 12) {
-                            Text(provider.initial)
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                                .frame(width: 36, height: 36)
-                                .background(provider.accent, in: RoundedRectangle(cornerRadius: 10))
-                            Text(provider.displayName)
-                                .font(.body)
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundStyle(.tertiary)
+                            Button { pick(provider) } label: { row(provider) }
+                                .buttonStyle(.plain)
                         }
                     }
+                    .background(Theme.card, in: RoundedRectangle(cornerRadius: 18))
+
+                    Text("Credentials are stored only on this device. Token Meter reads each provider's own usage endpoints.")
+                        .font(.caption2)
+                        .foregroundStyle(Theme.secondaryText)
+                        .padding(.horizontal, 12)
                 }
+                .padding(.horizontal, 16)
+                .padding(.top, 4)
+                .frame(maxWidth: 640)
+                .frame(maxWidth: .infinity)
             }
+            .background(Theme.groupedBackground)
+
             .navigationTitle("Add account")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -87,6 +80,49 @@ struct AddAccountView: View {
             
         }
     }
+    
+    // What happens when a provider is tapped.
+    private func pick(_ provider: Provider) {
+        switch provider {
+        case .openRouter:
+            showingKey = true
+        case .claude:
+            showingClaudeLogin = true
+        case .googleDrive:
+            Task {
+                do {
+                    onConnectGoogleDrive(try await googleAuth.signIn())
+                    dismiss()
+                } catch {
+                    print("❌ Google Drive connect failed:", error)
+                }
+            }
+        case .codex:
+            showingCodexLogin = true
+        }
+    }
+
+    // One row: badge, name, description, chevron.
+    private func row(_ provider: Provider) -> some View {
+        HStack(spacing: 12) {
+            ProviderBadge(provider: provider)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(provider.displayName)
+                    .font(.body)
+                    .foregroundStyle(.primary)
+                Text(provider.accountKind)
+                    .font(.caption)
+                    .foregroundStyle(Theme.secondaryText)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .foregroundStyle(Theme.secondaryText)
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .contentShape(Rectangle())
+    }
+
 }
 
 

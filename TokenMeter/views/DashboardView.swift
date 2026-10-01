@@ -30,12 +30,16 @@ struct DashboardView: View {
                             }
                         }
                         .padding(16)
+                        .frame(maxWidth: 640)
+                        .frame(maxWidth: .infinity)
+
                     }
                     .refreshable {
                         await viewModel.refresh()
                     }
                 }
             }
+            .background(Theme.groupedBackground)
             .navigationTitle("Token Meter")
             .toolbar(){
                 ToolbarItem{
@@ -114,7 +118,7 @@ struct DashboardView: View {
             Button("Add your first account"){
                 showingAdd = true
             }
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.glassProminent)
         }
     }
 }
