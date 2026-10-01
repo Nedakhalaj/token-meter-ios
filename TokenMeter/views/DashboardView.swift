@@ -13,6 +13,8 @@ struct DashboardView: View {
     @State private var reconnectingAccount: Account?
     @State private var isSetting = false
     @State private var googleAuth = GoogleAuthService()
+    @Environment(\.scenePhase) private var scenePhase
+
 
     var body:some View {
         NavigationStack{
@@ -59,6 +61,12 @@ struct DashboardView: View {
                     }
                     
                 }
+            }
+        }
+        // Fetch fresh numbers when the app opens or comes back to the foreground.
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            if phase == .active {
+                Task { await viewModel.refresh() }
             }
         }
         .sheet(isPresented: $showingAdd) {

@@ -20,6 +20,15 @@ struct AccountCard: View {
     @State private var showingRename = false
     @State private var draftName = ""
     @State private var confirmingRemove = false
+    
+    // "Claude · updated 2 minutes ago", or "Claude · not updated yet" before the first fetch.
+    private var subtitle: String {
+        guard let updatedAt = account.updatedAt else {
+            return "\(account.provider.displayName) · not updated yet"
+        }
+        return "\(account.provider.displayName) · updated \(updatedAt.formatted(.relative(presentation: .named)))"
+    }
+
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -77,10 +86,13 @@ struct AccountCard: View {
                 Text(account.nickname)
                     .font(.title2.weight(.semibold))
                     .lineLimit(1)
-                Text(account.provider.displayName)
-                    .font(.caption)
-                    .foregroundStyle(Theme.secondaryText)
-                    .lineLimit(1)
+                TimelineView(.everyMinute) { _ in
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(Theme.secondaryText)
+                        .lineLimit(1)
+                }
+
             }
 
             Spacer()

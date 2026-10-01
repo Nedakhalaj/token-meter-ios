@@ -47,4 +47,35 @@ struct AccountStoreTests{
         #expect(store.accounts.first?.windows.count == 1)
         #expect(store.accounts.first?.windows.first?.fraction == 0.5)
     }
+    @Test func successfulRefreshRecordsTheTime() async throws {
+        // Arrange
+        let account = Account(provider: .openRouter, nickname: "test", planName: "-", windows: [])
+        let stub = StubUsageService(provider: .openRouter,
+                                    windowsToReturn: [UsageWindow(label: "5-hour", fraction: 0.5, resetsAt: nil)])
+        let store = AccountStore(accounts: [account], services: [.openRouter: stub])
+        let before = Date()
+
+        // Act
+        await store.refresh(account: account)
+
+        // Assert
+        let updatedAt = try #require(store.accounts.first?.updatedAt)
+        #expect(updatedAt >= before)
+    }
+
+    @Test func failedRefreshKeepsTheOldTime() async {
+        // Arrange: an account that last updated successfully at a known time
+        let lastSuccess = Date(timeIntervalSince1970: 1_000_000)
+        let account = Account(provider: .openRouter, nickname: "test", planName: "-",
+                              windows: [], updatedAt: lastSuccess)
+        let stub = StubUsageService(provider: .openRouter, errorToThrow: UsageError.invalidKey)
+        let store = AccountStore(accounts: [account], services: [.openRouter: stub])
+
+        // Act
+        await store.refresh(account: account)
+
+        // Assert: the numbers didn't change, so neither does "updated …"
+        #expect(store.accounts.first?.updatedAt == lastSuccess)
+    }
+
 }
