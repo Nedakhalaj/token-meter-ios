@@ -47,16 +47,19 @@ struct Account: Identifiable, Codable {
     let nickname: String
     let planName: String
     let windows: [UsageWindow]
-    
-    init(id: UUID = UUID(), provider: Provider, nickname: String, planName: String, windows: [UsageWindow]) {
+    let updatedAt: Date?          // when usage was last fetched successfully. nil = never
+
+    init(id: UUID = UUID(), provider: Provider, nickname: String, planName: String,
+         windows: [UsageWindow], updatedAt: Date? = nil) {
         self.id = id
         self.provider = provider
         self.nickname = nickname
         self.planName = planName
         self.windows = windows
+        self.updatedAt = updatedAt
     }
-
 }
+
 
 extension Account {
     static var sample: [Account] = [
@@ -65,13 +68,17 @@ extension Account {
         Account( provider: .codex, nickname: "work", planName: "ChatGPT pro", windows: [UsageWindow(label: "5-hour", fraction: 0.88, resetsAt: Date().addingTimeInterval(60 * 41))])
     ]
     
-     func replacingWindows(with newWindows: [UsageWindow]) -> Account {
-         Account( id: id, provider: provider, nickname: nickname, planName: planName, windows: newWindows)
-    }
+    func replacingWindows(with newWindows: [UsageWindow]) -> Account {
+        Account(id: id, provider: provider, nickname: nickname, planName: planName,
+                windows: newWindows, updatedAt: Date())
+   }
+
     
     func renamed(to newName: String) -> Account {
-        Account(id: id, provider: provider, nickname: newName, planName: planName, windows: windows)
+        Account(id: id, provider: provider, nickname: newName, planName: planName,
+                windows: windows, updatedAt: updatedAt)
     }
+
     
 }
 
