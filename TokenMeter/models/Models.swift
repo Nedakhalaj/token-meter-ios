@@ -12,20 +12,27 @@ enum Provider: String, CaseIterable, Codable {
     case codex
     case openRouter
     case googleDrive
-    
+
     var displayName: String {
         switch self {
-        case .claude:
-            return "Claude"
-        case .codex:
-            return "Codex"
-        case .openRouter:
-            return "OpenRouter"
-        case .googleDrive:
-            return "Google Drive"
+        case .claude:      return "Claude"
+        case .codex:       return "Codex"
+        case .openRouter:  return "OpenRouter"
+        case .googleDrive: return "Google Drive"
+        }
+    }
+
+    /// One line under the name in the Add-account list (Android's accountKind).
+    var accountKind: String {
+        switch self {
+        case .claude:      return "Anthropic · Claude Free / Pro / Max"
+        case .codex:       return "OpenAI · ChatGPT Free / Plus / Pro"
+        case .openRouter:  return "OpenRouter · Pay-as-you-go credits"
+        case .googleDrive: return "Google · Drive storage (free + Google One)"
         }
     }
 }
+
 
 struct UsageWindow:Identifiable, Codable {
     var id = UUID()

@@ -66,6 +66,8 @@
 				models/LoadState.swift,
 				models/Models.swift,
 				services/AccountFileStore.swift,
+				views/Theme.swift,
+				views/UsageWindowRow.swift,
 			);
 			target = 812372FB3035D1CC00842886 /* TokenMeterWidgetExtension */;
 		};
