@@ -67,9 +67,14 @@ struct CodexAuthService {
         ])
 
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
-            throw UsageError.invalidKey        // refresh token no longer works → reconnect
+        let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+        if status == 400 || status == 401 {
+            throw UsageError.invalidKey                 // OpenAI rejected the refresh token
         }
+        guard (200...299).contains(status) else {
+            throw URLError(.badServerResponse)          // OpenAI had a problem: try again later
+        }
+
         return try CodexCredential(tokens: JSONDecoder().decode(CodexTokenResponse.self, from: data))
     }
 
