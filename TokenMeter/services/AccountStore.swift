@@ -60,7 +60,7 @@ final class AccountStore  {
         states[account.id] = .loading
         do{
             guard let service = services[account.provider] else {
-                states[account.id] = .failed("No service for this provider")
+                states[account.id] = .failed(.couldNotRefresh)
                 return
                 
             }
@@ -70,18 +70,18 @@ final class AccountStore  {
             states[account.id] = .loaded
             persist()
         }catch{
-            states[account.id] = .failed(message(for: error))
+            states[account.id] = .failed(failure(for: error))
         }
     }
     
-    private func message(for error: Error) -> String {
-        switch error{
-        case UsageError.missingKey: return "Not signed in - reconnect"
-        case UsageError.invalidKey: return "Sign-in expired - reconnect"
-        default: return "Couldn't refresh"
+    private func failure(for error: Error) -> LoadFailure {
+        switch error {
+        case UsageError.missingKey: return .notSignedIn
+        case UsageError.invalidKey: return .signInExpired
+        default:                    return .couldNotRefresh
         }
-            
-        }
+    }
+
     
     
     func refreshAll() async {

@@ -52,9 +52,14 @@ struct GoogleDriveService: UsageService {
         request.httpBody = form.percentEncodedQuery.map { Data($0.utf8) }
 
         let (data, response) = try await URLSession.shared.data(for: request)
-        guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
-            throw UsageError.invalidKey
+        let status = (response as? HTTPURLResponse)?.statusCode ?? 0
+        if status == 400 || status == 401 {
+            throw UsageError.invalidKey                 // Google rejected the refresh token
         }
+        guard status == 200 else {
+            throw URLError(.badServerResponse)          // Google had a problem: try again later
+        }
+
         return try JSONDecoder().decode(GoogleTokenResponse.self, from: data).access_token
     }
 }

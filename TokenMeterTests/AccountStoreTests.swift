@@ -26,7 +26,7 @@ struct AccountStoreTests{
         await store.refresh(account: account)
         
         //Assert
-        #expect(store.states[account.id] == .failed("Sign-in expired - reconnect"))
+        #expect(store.states[account.id] == .failed(.signInExpired))
 
         
     }
@@ -76,6 +76,21 @@ struct AccountStoreTests{
 
         // Assert: the numbers didn't change, so neither does "updated …"
         #expect(store.accounts.first?.updatedAt == lastSuccess)
+    }
+    
+    @Test func networkErrorAsksToRetryNotReconnect() async {
+        // Arrange: the fetch fails the way it does with no internet
+        let account = Account(provider: .openRouter, nickname: "test", planName: "-", windows: [])
+        let stub = StubUsageService(provider: .openRouter, errorToThrow: URLError(.notConnectedToInternet))
+        let store = AccountStore(accounts: [account], services: [.openRouter: stub])
+
+        // Act
+        await store.refresh(account: account)
+
+        // Assert
+        #expect(store.states[account.id] == .failed(.couldNotRefresh))
+        #expect(LoadFailure.couldNotRefresh.needsReconnect == false)
+        #expect(LoadFailure.signInExpired.needsReconnect == true)
     }
 
 }

@@ -36,9 +36,9 @@ struct AccountCard: View {
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
 
-            if case .failed(let reason) = state {
+            if case .failed(let failure) = state {
                 divider
-                errorBanner(reason)
+                errorBanner(failure)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 16)
             }
@@ -123,14 +123,19 @@ struct AccountCard: View {
         Divider().overlay(Theme.separator)
     }
 
-    private func errorBanner(_ reason: String) -> some View {
+    private func errorBanner(_ failure: LoadFailure) -> some View {
         HStack(spacing: 8) {
             Image(systemName: "exclamationmark.triangle.fill")
-            Text(reason)
+            Text(failure.message)
                 .font(.caption)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            Button("Reconnect") { onReconnect() }
-                .font(.caption.weight(.semibold))
+            if failure.needsReconnect {
+                Button("Reconnect") { onReconnect() }
+                    .font(.caption.weight(.semibold))
+            } else {
+                Button("Retry") { onRefresh() }
+                    .font(.caption.weight(.semibold))
+            }
         }
         .foregroundStyle(Theme.errorText)
         .padding(.leading, 16)
@@ -138,6 +143,7 @@ struct AccountCard: View {
         .padding(.vertical, 8)
         .background(Theme.errorBackground, in: RoundedRectangle(cornerRadius: 16))
     }
+
 }
 
 #Preview("Loaded") {
@@ -147,7 +153,7 @@ struct AccountCard: View {
 }
 
 #Preview("Failed") {
-    AccountCard(account: Account.sample[1], onRemove: {}, onRefresh: {}, onRename: { _ in }, onReconnect: {}, state: .failed("Sign-in expired - reconnect"))
+    AccountCard(account: Account.sample[1], onRemove: {}, onRefresh: {}, onRename: { _ in }, onReconnect: {}, state: .failed(.signInExpired))
         .padding()
         .background(Theme.groupedBackground)
 }
