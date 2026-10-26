@@ -11,7 +11,7 @@ enum AccountFileStore {
     
     private static var fileURL: URL {
         let shared = FileManager.default
-            .containerURL(forSecurityApplicationGroupIdentifier: "group.nedakhalaj.TokenMeter")!
+            .containerURL(forSecurityApplicationGroupIdentifier: "group.se.royan.tokenmeter")!
         return shared.appending(path: "accounts.json")
     }
 
