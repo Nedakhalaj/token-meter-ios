@@ -22,6 +22,15 @@ struct ClaudeLimit: Decodable{
     let kind: String?
     let percent: Double?  //0-100
     let resets_at: String?
+    let scope: ClaudeLimitScope?  // set on per-model limits like "weekly_scoped"
+}
+
+struct ClaudeLimitScope: Decodable{
+    let model: ClaudeScopeModel?
+}
+
+struct ClaudeScopeModel: Decodable{
+    let display_name: String?
 }
 
 struct ClaudeWindow: Decodable{
