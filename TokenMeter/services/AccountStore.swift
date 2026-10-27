@@ -57,6 +57,7 @@ final class AccountStore  {
     
      
     func refresh(account: Account) async  {
+        let previous = states[account.id]
         states[account.id] = .loading
         do{
             guard let service = services[account.provider] else {
@@ -70,6 +71,11 @@ final class AccountStore  {
             states[account.id] = .loaded
             persist()
         }catch{
+            // A cancelled request isn't a failure: put back what the card showed before.
+            if error is CancellationError || (error as? URLError)?.code == .cancelled {
+                states[account.id] = previous
+                return
+            }
             states[account.id] = .failed(failure(for: error))
         }
     }
