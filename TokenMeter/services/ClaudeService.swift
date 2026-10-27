@@ -15,10 +15,10 @@ struct ClaudeService: UsageService {
             throw UsageError.missingKey
         }
 
-        // 1 — which organization? Get the list, take the first real one.
+        // 1 — which organization? The chat one; an API org has no usage limits.
         let orgsData = try await get("https://claude.ai/api/organizations", sessionKey: sessionKey)
         let orgs = try JSONDecoder().decode([ClaudeOrg].self, from: orgsData)
-        guard let orgId = orgs.first(where: { $0.uuid != nil })?.uuid else {
+        guard let orgId = orgs.first(where: { $0.capabilities?.contains("chat") == true })?.uuid else {
             throw UsageError.invalidKey
         }
 
@@ -42,6 +42,10 @@ struct ClaudeService: UsageService {
         let (data, response) = try await URLSession.shared.data(for: request)
         if let http = response as? HTTPURLResponse, http.statusCode == 401 {
             throw UsageError.invalidKey
+        }
+        // Any other error must not decode into an empty usage response.
+        if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
+            throw URLError(.badServerResponse)
         }
         return data
     }
@@ -78,6 +82,11 @@ struct ClaudeService: UsageService {
 
     private func date(from iso: String?) -> Date? {
         guard let iso else { return nil }
-        return ISO8601DateFormatter().date(from: iso)
+        // Claude usually sends fractional seconds (…00.158365+00:00), but accept both.
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        if let date = formatter.date(from: iso) { return date }
+        formatter.formatOptions = [.withInternetDateTime]
+        return formatter.date(from: iso)
     }
 }

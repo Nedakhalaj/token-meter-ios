@@ -51,6 +51,14 @@ struct AccountCard: View {
                         .foregroundStyle(Theme.secondaryText)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 16)
+                } else if state == .loaded {
+                    // The fetch worked but the plan reports no limits (e.g. a free Claude account).
+                    divider
+                    Text("No usage limits on this plan")
+                        .font(.subheadline)
+                        .foregroundStyle(Theme.secondaryText)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 16)
                 }
             } else {
                 ForEach(account.windows) { window in
