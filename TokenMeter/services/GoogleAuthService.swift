@@ -123,9 +123,9 @@ final class GoogleAuthService: NSObject {
 
 extension GoogleAuthService: ASWebAuthenticationPresentationContextProviding {
     func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
-        UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .flatMap { $0.windows }
-            .first { $0.isKeyWindow } ?? ASPresentationAnchor()
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        // Sign-in only starts from a button on screen, so a window scene always exists here.
+        return scenes.flatMap { $0.windows }.first { $0.isKeyWindow }
+            ?? ASPresentationAnchor(windowScene: scenes.first!)
     }
 }
