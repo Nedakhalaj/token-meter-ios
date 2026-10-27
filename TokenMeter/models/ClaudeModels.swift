@@ -9,6 +9,7 @@ import Foundation
 
 struct ClaudeOrg: Decodable{
     let uuid: String?
+    let capabilities: [String]?
 }
 
 struct ClaudeUsageResponse: Decodable{
