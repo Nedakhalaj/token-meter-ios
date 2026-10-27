@@ -37,7 +37,8 @@ struct DashboardView: View {
 
                     }
                     .refreshable {
-                        await viewModel.refresh()
+                        // A separate Task: SwiftUI ending the pull gesture can't cancel the requests.
+                        await Task { await viewModel.refresh() }.value
                     }
                 }
             }
