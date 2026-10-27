@@ -56,7 +56,7 @@ struct ClaudeService: UsageService {
         if let limits = usage.limits, !limits.isEmpty {
             return limits.compactMap { limit in
                 guard let percent = limit.percent else { return nil }
-                return UsageWindow(label: label(for: limit.kind),
+                return UsageWindow(label: label(for: limit),
                                    fraction: percent / 100,
                                    resetsAt: date(from: limit.resets_at))
             }
@@ -72,11 +72,20 @@ struct ClaudeService: UsageService {
         return result
     }
 
-    private func label(for kind: String?) -> String {
-        switch kind {
+    private func label(for limit: ClaudeLimit) -> String {
+        switch limit.kind {
         case "session":    return "5-hour"
         case "weekly_all": return "Weekly"
-        default:           return kind ?? "Usage"
+        case "weekly_scoped":
+            // A weekly limit for one model, e.g. "Weekly · Fable".
+            if let model = limit.scope?.model?.display_name { return "Weekly · \(model)" }
+            return "Weekly (one model)"
+        case let kind?:
+            // Unknown kind: never show the raw API name ("monthly_all" → "Monthly all").
+            let words = kind.replacingOccurrences(of: "_", with: " ")
+            return words.prefix(1).uppercased() + words.dropFirst()
+        case nil:
+            return "Usage"
         }
     }
 
